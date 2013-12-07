@@ -1,0 +1,42 @@
+m255
+K3
+13
+cModel Technology
+Z0 d/home/kapo/workspace/Tea
+Etea_sim
+Z1 w1386325089
+Z2 DPx4 ieee 11 numeric_std 0 22 O3PF8EB`?j9=z7KT`fn941
+Z3 DPx3 std 6 textio 0 22 5>J:;AW>W0[[dW0I6EN1Q0
+Z4 DPx4 ieee 14 std_logic_1164 0 22 5=aWaoGZSMWIcH0i^f`XF1
+Z5 d/home/kapo/workspace/Tea
+Z6 8/home/kapo/workspace/Tea/Tea_Sim.vhdl
+Z7 F/home/kapo/workspace/Tea/Tea_Sim.vhdl
+l0
+L20
+V86IL3hhlC2jc`XILka;aG0
+!s100 aocAMd9=5j6k>2V9J]=>o3
+Z8 OV;C;10.1d;51
+32
+!i10b 1
+Z9 !s108 1386325767.118961
+Z10 !s90 -reportprogress|300|-work|work|/home/kapo/workspace/Tea/Tea_Sim.vhdl|
+Z11 !s107 /home/kapo/workspace/Tea/Tea_Sim.vhdl|
+Z12 o-work work -O0
+Z13 tExplicit 1
+Abehav
+R2
+R3
+R4
+Z14 DEx4 work 7 tea_sim 0 22 86IL3hhlC2jc`XILka;aG0
+l47
+L23
+Z15 VYE=UkXjC3jd6e=G9BWg[R2
+Z16 !s100 =HknF>;FXG^CezGOS>jXb0
+R8
+32
+!i10b 1
+R9
+R10
+R11
+R12
+R13

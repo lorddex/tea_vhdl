@@ -1,0 +1,65 @@
+# do Tea_run_msim_rtl_vhdl.do 
+# if {[file exists rtl_work]} {
+# 	vdel -lib rtl_work -all
+# }
+# vlib rtl_work
+# vmap work rtl_work
+# Copying /home/kapo/Programmi/Quartus/modelsim_ase/linux/../modelsim.ini to modelsim.ini
+# Modifying modelsim.ini
+# ** Warning: Copied /home/kapo/Programmi/Quartus/modelsim_ase/linux/../modelsim.ini to modelsim.ini.
+#          Updated modelsim.ini.
+# 
+# vcom -93 -work work {/home/kapo/workspace/Tea/Tea.vhd}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Compiling entity Tea
+# -- Compiling architecture behave of Tea
+# vcom -93 -work work {/home/kapo/workspace/Tea/TeaCore.vhdl}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Loading package std_logic_textio
+# -- Compiling entity TeaCore
+# -- Compiling architecture behave of TeaCore
+# 
+# vcom -93 -work work {/home/kapo/workspace/Tea/Tea_Core_Sim.vhd}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Compiling entity Tea_Sim
+# -- Compiling architecture behav of Tea_Sim
+# 
+# vsim -t 1ps -L altera -L lpm -L sgate -L altera_mf -L altera_lnsim -L cycloneive -L rtl_work -L work -voptargs="+acc"  Tea_Sim
+# vsim -L altera -L lpm -L sgate -L altera_mf -L altera_lnsim -L cycloneive -L rtl_work -L work -voptargs=\"+acc\" -t 1ps Tea_Sim 
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading work.tea_sim(behav)
+# Loading ieee.std_logic_textio(body)
+# Loading work.teacore(behave)
+# 
+# add wave *
+# view structure
+# .main_pane.structure.interior.cs.body.struct
+# view signals
+# .main_pane.objects.interior.cs.body.tree
+# run -all
+#  k0=XXXXXXXX k1=XXXXXXXX k2=XXXXXXXX k3=XXXXXXXXdelta=XXXXXXXX sum=XXXXXXXX v0=XXXXXXXX v1=XXXXXXXX
+#  k0=XXXXXXXX k1=XXXXXXXX k2=XXXXXXXX k3=XXXXXXXXdelta=9E3779B9 sum=XXXXXXXX v0=XXXXXXXX v1=XXXXXXXX
+#  k0=012F0C17 k1=00000000 k2=00000000 k3=00000000delta=9E3779B9 sum=9E3779B9 v0=XXXXXXXX v1=XXXXXXXX
+#  k0=012F0C17 k1=00000000 k2=00000000 k3=00000000delta=9E3779B9 sum=9E3779B9 v0=9F18762E v1=XXXXXXXX
+#  k0=012F0C17 k1=00000000 k2=00000000 k3=00000000delta=9E3779B9 sum=9E3779B9 v0=9F18762E v1=C8304EB6
+#  k0=012F0C17 k1=00000000 k2=00000000 k3=00000000delta=9E3779B9 sum=9E3779B9 v0=9F18762E v1=C8304EB6
+#  k0=012F0C17 k1=00000000 k2=00000000 k3=00000000delta=9E3779B9 sum=28B7BD67 v0=1BEA4313 v1=61C88DC3
+#  k0=012F0C17 k1=00000000 k2=00000000 k3=00000000delta=9E3779B9 sum=28B7BD67 v0=6BC6197D v1=D7484A1D
+#  k0=012F0C17 k1=00000000 k2=00000000 k3=00000000delta=9E3779B9 sum=28B7BD67 v0=8CF6184D v1=D7484A1D
+# ** Note: end of test
+#    Time: 20 ns  Iteration: 0  Instance: /tea_sim
