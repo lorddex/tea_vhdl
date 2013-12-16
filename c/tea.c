@@ -2,22 +2,37 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
+#include <inttypes.h>
+
+#define TEA	0
+#define STREAM  1
+#define STREAM_DECODE 1
 
 #define ROUND       ((32 + KEY*4) - 1)
 #define KEY         (256/32)
+#define KEY2        4
 #define DELTA       0x9e3779b9
 #define NUM_ROUNDS  32
 
 //unsigned int a, b, c;
 
-uint8_t key[KEY] = { 128, 182, 218, 1, 139, 193, 19, 93 };
+uint8_t key[] = { 128, 182, 218, 1, 139, 193, 19, 93 };
+
+// 11110000001111111100000011111001 -> 4030710009
+// 11101010101000000000000000000000 -> 3936354304
+// 00101010101010101010101010100000 -> 715827872
+// 00000000010101010101010101010101 -> 5592405
+//uint32_t key2[] = { 4030710009, 3936354304, 715827872, 5592405 };
+uint32_t key2[] = { 5592405, 715827872, 3936354304, 4030710009 };
+//uint8_t key[KEY] = { 1, 0, 0, 0, 0, 0, 0, 0 };
 
 // RC4 - http://bradconte.com/rc4_c - https://github.com/B-Con/crypto-algorithms
 // Key Scheduling Algorithm 
 // Input: state - the state used to generate the keystream
 //        key - Key to use to initialize the state 
-//        len - length of key in bytes  
-void arc4_ksa(uint32_t *state, uint8_t *key)
+//        len - length of key in bytes 
+
+void arc4_ksa(uint32_t *state, uint32_t *key)
 {
    int i, j=0;
    uint32_t t; 
@@ -27,12 +42,23 @@ void arc4_ksa(uint32_t *state, uint8_t *key)
    
    for (i=0; i < 64; ++i)
       state[i] = i; 
+/*   printf("STATUS(i): ");
+   for (i=0; i< 64; i++)
+        printf("%08"PRIX32" ", state[i]);
+    printf("\n");*/
+
    for (i=0; i < 64; ++i) {
-      j = (j + state[i] + key[i % KEY]) % 64; 
-      t = state[i]; 
+      j = (j + state[i] + key[i % KEY2]) % 64; 
+      t = state[i];
+//      printf("switching i(value)=%d(%"PRIX32") key(value)=%"PRIX32"(%d) with j(value)=%d(%"PRIX32")\n", i, state[i], key[i % KEY2], i % KEY2, j, state[j]); 
       state[i] = state[j]; 
       state[j] = t; 
    }
+	
+/*   printf("STATUS: ");
+   for (i=0; i< 64; i++)
+        printf("%08"PRIX32" ", state[i]);
+    printf("\n");*/
 }
 
 // Pseudo-Random Generator Algorithm 
@@ -55,7 +81,7 @@ void arc4_prga(uint32_t *state, uint32_t *out, int len)
    }
 }  
 
-void arc4_encrypt(uint32_t *v, uint8_t *key, int len)
+void arc4_encrypt(uint32_t *v, uint32_t *key, int len)
 {
     uint32_t state[64];
 
@@ -152,55 +178,60 @@ void xtea_decrypt(uint32_t *v, uint8_t *key) {
 int main() {
 
     uint32_t v[] = {128, 0};
-    uint32_t s[] = {128, 0, 3, 5, 198, 201, 25, 10};
+    uint32_t s[] = {123456789, 987654321, 192837465, 918273645, 123987564, 987321645, 25, 10};
 
     int i;
-
-    printf("Data to encode: %08lX %08lX\n", v[0], v[1]);
+#if TEA == 1
+    printf("Data to encode: %08"PRIX32" %08"PRIX32"\n", v[0], v[1]);
 
     /* TEA */
     tea_encrypt(v, key);
-    printf("Tea encoded values: v0=%08lX v1=%08lX\n", v[0], v[1]);
+    printf("Tea encoded values: v0=%08"PRIX32" v1=%08"PRIX32"\n", v[0], v[1]);
 
     tea_decrypt(v, key);
-    printf("Tea decoded values: v0=%08lX %08lX\n", v[0], v[1]);
-
+    printf("Tea decoded values: v0=%08"PRIX32" %08"PRIX32"\n", v[0], v[1]);
+#elif TEA == 2
     /* XTEA */
     xtea_encrypt(v, key);
-    printf("XTea encoded values: v0=%08lX v1=%08lX\n", v[0], v[1]);
+    printf("XTea encoded values: v0=%08"PRIX32" v1=%08"PRIX32"\n", v[0], v[1]);
 
     xtea_decrypt(v, key);
-    printf("XTea decoded values: v0=%08lX %08lX\n", v[0], v[1]);
-
+    printf("XTea decoded values: v0=%08"PRIX32" %08"PRIX32"\n", v[0], v[1]);
+#elif TEA == 3
     /* XXTEA */
     xtea_encrypt(v, key);
-    printf("XXTea encoded values: v0=%08lX v1=%08lX\n", v[0], v[1]);
+    printf("XXTea encoded values: v0=%08"PRIX32" v1=%08"PRIX32"\n", v[0], v[1]);
 
     xtea_decrypt(v, key);
-    printf("XXTea decoded values: v0=%08lX %08lX\n", v[0], v[1]);
-    
-    printf("Stream to encode: ");
-    for (i=0;i<8;i++)
-        printf("%08lX", s[i]);
-    printf("\n");
+    printf("XXTea decoded values: v0=%08"PRIX32" %08"PRIX32"\n", v[0], v[1]);
+#endif
 
+#if STREAM == 1
     /* ARC4 */
-    arc4_encrypt(s, key, 8);
-    printf("RC4 encoded values: ");
-    for (i=0;i<8;i++)
-        printf("%08lX", s[i]);
-    printf("\n");
-    
-    printf("Stream to decode: ");
-    for (i=0;i<8;i++)
-        printf("%08lX", s[i]);
+    printf("Stream to encode: ");
+    for (i=0;i<6;i++)
+        printf("%08"PRIX32" ", s[i]);
     printf("\n");
 
-    arc4_encrypt(s, key, 8);
-    printf("RC4 decoded values: ");
-    for (i=0;i<8;i++)
-        printf("%08lX", s[i]);
+    arc4_encrypt(s, key2, 6);
+    printf("RC4 encoded values: ");
+    for (i=0;i<6;i++)
+        printf("%08"PRIX32" ", s[i]);
     printf("\n");
+
+#if STREAM_DECODE == 1
+    printf("Stream to decode: ");
+    for (i=0;i<6;i++)
+        printf("%08"PRIX32" ", s[i]);
+    printf("\n");
+
+    arc4_encrypt(s, key2, 6);
+    printf("RC4 decoded values: ");
+    for (i=0;i<6;i++)
+        printf("%08"PRIX32" ", s[i]);
+    printf("\n");
+#endif
+#endif
 
     return 0;
 }
