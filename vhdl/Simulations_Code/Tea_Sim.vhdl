@@ -63,10 +63,22 @@ begin
 		  
 		  wait for 1000 ns;
 
-		  write(mline, string'(" vo="));
+		  write(mline, string'("ENC vo="));
 		  hwrite(mline, std_logic_vector(s_vo));
 
 		  writeline(output, mline);		
+		
+		 
+		  s_vi <= s_vo;
+		  s_mode <= '1';
+		  s_enable <= '1';
+		  
+		  wait for 1000 ns;
+
+		  write(mline, string'("DEC vo="));
+		  hwrite(mline, std_logic_vector(s_vo));
+
+		  writeline(output, mline);
 		
 		  ENDSIM:=true;
         assert false report "end of test" severity note;

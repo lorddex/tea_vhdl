@@ -12,6 +12,7 @@ architecture behav of Tea_Sim is
 		  key             : in std_logic_vector(127 downto 0);	-- key
 		  vi      	      : in std_logic_vector (63 downto 0); 	-- input data
 		  sum_i 				: in std_logic_vector(31 downto 0);		-- sum input
+		  enable				: in std_logic;								-- enable
 		  vo      	      : out std_logic_vector (63 downto 0);	-- data output
 		  sum_o 				: out std_logic_vector(31 downto 0)		-- sum output
 	 );
@@ -23,7 +24,8 @@ architecture behav of Tea_Sim is
    signal s_sum_i			  : std_logic_vector (31 downto 0);
 	signal s_sum_o			  : std_logic_vector (31 downto 0);
 	signal s_mode			  : std_logic;
-	 
+	signal s_enable		  : std_logic;
+	
 begin
 
     Tea_i : TeaCore
@@ -33,10 +35,13 @@ begin
 				key	=> s_key,
 				sum_i => s_sum_i,
 				sum_o => s_sum_o,
-				mode => s_mode
+				mode => s_mode,
+				enable => s_enable
         );
 		  
     stim_proc: process begin
+		  
+		  s_enable <= '1';
 		  
 		  s_mode <= '0';
 		  s_sum_i <= "00000000000000000000000000000000";

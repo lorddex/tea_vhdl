@@ -30,6 +30,15 @@ architecture behave of Tea is
 		 );
 	end component;
 	
+	component Arc4_Cypher is
+		 port (
+			  clk				   : in std_logic;
+			  key             : in std_logic_vector(127 downto 0);	-- key
+			  i_stream			: in std_logic_vector(31 downto 0);
+			  o_stream			: out std_logic_vector(31 downto 0)
+		 );
+	end component;
+	
 	signal round				: unsigned(5 downto 0) := "000000";
 	
 	signal s_sum_i				: std_logic_vector(31 downto 0);
@@ -41,6 +50,11 @@ architecture behave of Tea is
 	
 	signal s_enable			: std_logic;
 	
+	
+	signal s_arc4_key			:std_logic_vector(127 downto 0);
+	signal s_arc4_i 			:std_logic_vector(31 downto 0);
+	signal s_arc4_o 			:std_logic_vector(31 downto 0);
+	
 begin
 	
 	core1: TeaCore port map (
@@ -51,6 +65,13 @@ begin
 		vo => s_vo,
 		sum_o => s_sum_o,
 		enable => s_enable
+	);
+	
+	arc4_1: Arc4_Cypher port map (
+		clk => clk,
+		key 		=> s_arc4_key,
+	   i_stream	=> s_arc4_i,
+		o_stream	=> s_arc4_o
 	);
 	
 	process (clk, vi, s_vo, s_sum_o) 
