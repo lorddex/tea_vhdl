@@ -130,7 +130,7 @@ begin
 		  
 		  -- DECODING
 		  
-		  s_i_s <= x"075BCD38"; -- to code
+		  s_i_s <= x"75F916F1"; -- to code
 
 		  wait for clk_period;
 		  
@@ -143,7 +143,7 @@ begin
 		  
 		  wait for 10 us;
 		  
-		  s_i_s <= x"3ADE68A4"; -- to code
+		  s_i_s <= x"FEBB7D8F"; -- to code
 		  
 		  wait for clk_period;
 		  
@@ -156,7 +156,7 @@ begin
 
 		  wait for 10 us;
 		  
-		  s_i_s <= x"0B7E775B"; -- to code
+		  s_i_s <= x"F2F4EC39"; -- to code
 		   wait for clk_period;
 		  
 		  while s_out_ok = '0' loop
@@ -168,7 +168,7 @@ begin
 		  
 		  wait for 10 us;
 		  
-		  s_i_s <= x"36BBBE74"; -- to code
+		  s_i_s <= x"572DE517"; -- to code
 		   wait for clk_period;
 		  
 		  while s_out_ok = '0' loop

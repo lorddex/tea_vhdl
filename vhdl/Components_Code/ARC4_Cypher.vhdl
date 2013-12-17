@@ -28,10 +28,8 @@ architecture behave of Arc4_Cypher is
 		);
 	end component;
 
-	type status_array is array(63 downto 0) of unsigned(31 downto 0);
-	type key_array is array(3 downto 0) of unsigned(31 downto 0);
+	type status_array is array(255 downto 0) of unsigned(7 downto 0);
 	
-   signal s_key  		  		: key_array;
    signal s_status_a			: status_array;
 	signal s_status 			: std_logic_vector(2047 downto 0);
 	signal step					: std_logic_vector(1 downto 0) := "00";	
@@ -50,35 +48,24 @@ begin
 		reset		=> reset
 	);
 	
-	--process (clk, moment, s_ready, s_status, s_status_a, i_stream) 
 	process (s_ready, clk, reset) 
 		variable mline : line;
 		variable j		: integer;
 		variable x		: integer;
-		variable temp	: unsigned(31 downto 0);
-
+		variable t_int : integer;
+		variable temp	: unsigned(7 downto 0);
+		variable t_s   : unsigned(31 downto 0);
 		begin
 			if reset = '0' then
 				if (s_ready = '1') then
 					if (rising_edge(clk)) then
 						if step = "00" then
 							step <= "00";
-		--					write(mline, string'("STATUS(i): "));
-							for i in 1 to 64 loop
-								s_status_a(i-1) <= unsigned(s_status((i*32 -1) downto ((i-1)*32)));
-		--						hwrite(mline, std_logic_vector(s_status_a(i-1)));
-		--						write(mline, string'(" "));
+							for i in 1 to 256 loop
+								s_status_a(i-1) <= unsigned(s_status((i*8 -1) downto ((i-1)*8)));
 							end loop;
-		--					writeline(output, mline);
 							step <= "10";
 						elsif step = "10" then
-					-- 	 C CODE	
-					--     i = (i + 1) % 64;
-					--     j = (j + state[i]) % 64;
-					--     t = state[i];
-					--     state[i] = state[j];
-					--     state[j] = t;
-					--     out[x] ^= state[(state[i] + state[j]) % 64];
 							x := old_x;
 							j := old_j;
 							write(mline, x);
@@ -86,23 +73,32 @@ begin
 							write(mline, j);
 							writeline(output, mline);
 							old_in <= i_stream;
-							x := (x + 1) mod 64;
-							j := (j + to_integer(s_status_a(x))) mod 64;
+							for i in 0 to 3 loop
+							x := (x + 1) mod 256;
+							j := (j + to_integer(s_status_a(x))) mod 256;
 							temp := s_status_a(x);
 							s_status_a(x) <= s_status_a(j);
 							s_status_a(j) <= temp;
+							t_int := to_integer((s_status_a(x) + s_status_a(j)) mod 256);
+							if i = 0 then
+								t_s := x"000000" & s_status_a(t_int);
+							elsif i = 1 then
+								t_s := (x"0000" & s_status_a(t_int) & t_s(7 downto 0));
+							elsif i = 2 then
+								t_s := (x"00" & s_status_a(t_int) & t_s(15 downto 0));
+							elsif i = 3 then
+								t_s := (s_status_a(t_int) & t_s(23 downto 0));
+							end if;
+							end loop;
 							old_x <= x;
 							old_j <= j;
-							x := to_integer((s_status_a(x) + s_status_a(j)) mod 64);
-							o_stream <= std_logic_vector(unsigned(i_stream) xor s_status_a(x));
+							o_stream <= std_logic_vector(unsigned(i_stream) xor t_s);
 							step <= "11";
 						elsif step = "11" then		
 							if old_in /= i_stream then
 								step <= "00";
 								out_ok <= '0';
 							else	
-				--				hwrite(mline, std_logic_vector(unsigned(i_stream) xor s_status_a(x)));
-				--				writeline(output, mline);
 								out_ok <= '1';
 							end if;
 						end if;
@@ -110,7 +106,9 @@ begin
 				end if;
 		else
 			out_ok <= '0';
-			temp := x"00000000";
+			t_int := 0;
+			t_s := x"00000000";
+			temp := x"00";
 			old_x <= 0;
 			old_j <= 0;
 			x:=0;

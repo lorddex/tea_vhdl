@@ -60,13 +60,24 @@ begin
 -- 00000000010101010101010101010101 -> 5592405	 
 		
 		  s_reset <= '1';
-		  wait for 20 ns;
+		  wait for clk_period;
 		  
 		  s_reset <= '0';
-		
+			
 		  s_key <= "11110000001111111100000011111001111010101010000000000000000000000010101010101010101010101010000000000000010101010101010101010101";
 		
-		  wait for 500000 ns;
+		  while s_ready = '0' loop
+			wait for clk_period;
+		  end loop;
+		
+		  s_reset <= '0';
+		  wait for clk_period;
+		  
+		  s_key <= "11110000001111111100000011111001111010101010000000000000000000000010101010101010101010101010000000000000010101010101010101010101";
+	 
+	     while s_ready = '0' loop
+			wait for clk_period;
+		  end loop;
 	 
 		  ENDSIM:=true;
         assert false report "end of test" severity note;
