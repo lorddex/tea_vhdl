@@ -83,6 +83,8 @@ begin
 		  hwrite(mline, s_o_s);
 		  writeline(output, mline);
 		  
+		  wait for 10 us;
+		  
 		  s_i_s <= x"3ADE68B1"; -- to code
 		  
 		  wait for clk_period;
@@ -93,76 +95,86 @@ begin
 		  
 		  hwrite(mline, s_o_s);
 		  writeline(output, mline);
---		   
---		  s_i_s <= x"0B7E7759"; -- to code
---		   wait for clk_period;
---		  
---		  while s_out_ok = '0' loop
---			wait for clk_period;
---		  end loop;
---		  
---		  hwrite(mline, s_o_s);
---		  writeline(output, mline);
---		  
---		  s_i_s <= x"36BBBE6D"; -- to code
---		   wait for clk_period;
---		  
---		  while s_out_ok = '0' loop
---			wait for clk_period;
---		  end loop;
---		  
---		  hwrite(mline, s_o_s);
---		  writeline(output, mline);
---		  
---		  s_i_s <= x"0763E66C"; -- to code
---		  wait for clk_period;
---		  
---		  while s_out_ok = '0' loop
---			wait for clk_period;
---		  end loop;
---		  
---		  hwrite(mline, s_o_s);
---		  writeline(output, mline);
---		  
---		  s_i_s <= x"3AD9552D"; -- to code
---		  wait for clk_period;
---		  
---		  while s_out_ok = '0' loop
---			wait for clk_period;
---		  end loop;
---		  
---		  hwrite(mline, s_o_s);
---		  writeline(output, mline);
 
+		  wait for 10 us;
+		  
+		  s_i_s <= x"0B7E7759"; -- to code
+		   wait for clk_period;
+		  
+		  while s_out_ok = '0' loop
+			wait for clk_period;
+		  end loop;
+		  
+		  hwrite(mline, s_o_s);
+		  writeline(output, mline);
+		  
+		  wait for 10 us;
+		  
+		  s_i_s <= x"36BBBE6D"; -- to code
+		   wait for clk_period;
+		  
+		  while s_out_ok = '0' loop
+			wait for clk_period;
+		  end loop;
+		  
+		  hwrite(mline, s_o_s);
+		  writeline(output, mline);
+		  
+		  wait for 10 us;
+		  
+		  s_i_s <= x"0763E66C"; -- to code
+		  wait for clk_period;
+		  
+		  while s_out_ok = '0' loop
+			wait for clk_period;
+		  end loop;
+		  
+		  hwrite(mline, s_o_s);
+		  writeline(output, mline);
+		  
+		  wait for 10 us;
+		  
+		  s_i_s <= x"3AD9552D"; -- to code
+		  wait for clk_period;
+		  
+		  while s_out_ok = '0' loop
+			wait for clk_period;
+		  end loop;
+		  
+		  hwrite(mline, s_o_s);
+		  writeline(output, mline);
+
+
+		  wait for 10 us;
 
 --		  RESET		  
-		  s_reset <= '1';	 
-			 
-		  wait for clk_period;
-		
+		  s_reset <= '1';	 	 
+   	  wait for clk_period;
 		  s_reset <= '0';
 		  
-		  s_i_s <= x"075BCD38"; -- to code
-
-		  wait for clk_period;
-		  
-		  while s_out_ok = '0' loop
-			wait for clk_period;
-		  end loop;
-		  
-		  hwrite(mline, s_o_s);
-		  writeline(output, mline);
-		  
-		  s_i_s <= x"3ADE689F"; -- to code
-		  
-		  wait for clk_period;
-		  
-		  while s_out_ok = '0' loop
-			wait for clk_period;
-		  end loop;
-		  
-		  hwrite(mline, s_o_s);
-		  writeline(output, mline);
+--		  s_i_s <= x"075BCD38"; -- to code
+--
+--		  wait for clk_period;
+--		  
+--		  while s_out_ok = '0' loop
+--			wait for clk_period;
+--		  end loop;
+--		  
+--		  hwrite(mline, s_o_s);
+--		  writeline(output, mline);
+--		  
+--		  wait for 10 us;
+--		  
+--		  s_i_s <= x"3ADE689F"; -- to code
+--		  
+--		  wait for clk_period;
+--		  
+--		  while s_out_ok = '0' loop
+--			wait for clk_period;
+--		  end loop;
+--		  
+--		  hwrite(mline, s_o_s);
+--		  writeline(output, mline);
 --		   
 --		  s_i_s <= x"0B7E7745"; -- to code
 --		   wait for clk_period;

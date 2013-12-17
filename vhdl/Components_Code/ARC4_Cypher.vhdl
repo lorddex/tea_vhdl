@@ -34,7 +34,7 @@ architecture behave of Arc4_Cypher is
    signal s_key  		  		: key_array;
    signal s_status_a			: status_array;
 	signal s_status 			: std_logic_vector(2047 downto 0);
-	signal moment				: std_logic_vector(1 downto 0) := "00";	
+	signal step					: std_logic_vector(1 downto 0) := "00";	
 	signal s_ready				: std_logic;
 	signal old_in				: std_logic_vector(31 downto 0);
 	signal old_x				: integer := 0;
@@ -61,10 +61,8 @@ begin
 			if reset = '0' then
 				if (s_ready = '1') then
 					if (rising_edge(clk)) then
-						if moment = "00" then
-							out_ok <= '0';
-							old_x <= 0;
-							old_j <= 0;
+						if step = "00" then
+							step <= "00";
 		--					write(mline, string'("STATUS(i): "));
 							for i in 1 to 64 loop
 								s_status_a(i-1) <= unsigned(s_status((i*32 -1) downto ((i-1)*32)));
@@ -72,8 +70,8 @@ begin
 		--						write(mline, string'(" "));
 							end loop;
 		--					writeline(output, mline);
-							moment <= "10";
-						elsif moment = "10" then
+							step <= "10";
+						elsif step = "10" then
 					-- 	 C CODE	
 					--     i = (i + 1) % 64;
 					--     j = (j + state[i]) % 64;
@@ -83,6 +81,10 @@ begin
 					--     out[x] ^= state[(state[i] + state[j]) % 64];
 							x := old_x;
 							j := old_j;
+							write(mline, x);
+							write(mline, string'(" "));
+							write(mline, j);
+							writeline(output, mline);
 							old_in <= i_stream;
 							x := (x + 1) mod 64;
 							j := (j + to_integer(s_status_a(x))) mod 64;
@@ -91,15 +93,14 @@ begin
 							s_status_a(j) <= temp;
 							old_x <= x;
 							old_j <= j;
-							moment <= "11";
-						elsif moment = "11" then
+							x := to_integer((s_status_a(x) + s_status_a(j)) mod 64);
+							o_stream <= std_logic_vector(unsigned(i_stream) xor s_status_a(x));
+							step <= "11";
+						elsif step = "11" then		
 							if old_in /= i_stream then
-								old_x <= 0;
-								old_j <= 0;
-								moment <= "00";
-							else
-								x := to_integer((s_status_a(x) + s_status_a(j)) mod 64);
-								o_stream <= std_logic_vector(unsigned(i_stream) xor s_status_a(x));
+								step <= "00";
+								out_ok <= '0';
+							else	
 				--				hwrite(mline, std_logic_vector(unsigned(i_stream) xor s_status_a(x)));
 				--				writeline(output, mline);
 								out_ok <= '1';
@@ -111,7 +112,7 @@ begin
 			out_ok <= '0';
 			old_x <= 0;
 			old_j <= 0;
-			moment <= "00";
+			step <= "00";
 		end if;
 	end process;
 	

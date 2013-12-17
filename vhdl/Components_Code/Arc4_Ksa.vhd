@@ -115,6 +115,8 @@ begin
 			end if;
 		else
 			cntr <= 0;
+			j := 0;
+			temp := x"00000000";
 			moment <= "000";
 		end if;
 	end process;
