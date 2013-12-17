@@ -64,13 +64,14 @@ begin
 	 variable mline: line;
 	 begin
 		    
-		  s_reset <= '1';	 
+		  -- GENERAL	 
 			 
+		  s_reset <= '1';	  
 		  wait for clk_period;
-		
 		  s_reset <= '0';
-			 
 		  s_key <= "11110000001111111100000011111001111010101010000000000000000000000010101010101010101010101010000000000000010101010101010101010101";
+			
+		  -- ENCODING 	
 			
 		  s_i_s <= x"075BCD15"; -- to code
 
@@ -119,105 +120,65 @@ begin
 		  
 		  hwrite(mline, s_o_s);
 		  writeline(output, mline);
-		  
-		  wait for 10 us;
-		  
-		  s_i_s <= x"0763E66C"; -- to code
-		  wait for clk_period;
-		  
-		  while s_out_ok = '0' loop
-			wait for clk_period;
-		  end loop;
-		  
-		  hwrite(mline, s_o_s);
-		  writeline(output, mline);
-		  
-		  wait for 10 us;
-		  
-		  s_i_s <= x"3AD9552D"; -- to code
-		  wait for clk_period;
-		  
-		  while s_out_ok = '0' loop
-			wait for clk_period;
-		  end loop;
-		  
-		  hwrite(mline, s_o_s);
-		  writeline(output, mline);
-
-
+		 
 		  wait for 10 us;
 
---		  RESET		  
+		  -- RESET		  
 		  s_reset <= '1';	 	 
    	  wait for clk_period;
 		  s_reset <= '0';
 		  
---		  s_i_s <= x"075BCD38"; -- to code
---
---		  wait for clk_period;
---		  
---		  while s_out_ok = '0' loop
---			wait for clk_period;
---		  end loop;
---		  
---		  hwrite(mline, s_o_s);
---		  writeline(output, mline);
---		  
---		  wait for 10 us;
---		  
---		  s_i_s <= x"3ADE689F"; -- to code
---		  
---		  wait for clk_period;
---		  
---		  while s_out_ok = '0' loop
---			wait for clk_period;
---		  end loop;
---		  
---		  hwrite(mline, s_o_s);
---		  writeline(output, mline);
---		   
---		  s_i_s <= x"0B7E7745"; -- to code
---		   wait for clk_period;
---		  
---		  while s_out_ok = '0' loop
---			wait for clk_period;
---		  end loop;
---		  
---		  hwrite(mline, s_o_s);
---		  writeline(output, mline);
---		  
---		  s_i_s <= x"36BBBE43"; -- to code
---		   wait for clk_period;
---		  
---		  while s_out_ok = '0' loop
---			wait for clk_period;
---		  end loop;
---		  
---		  hwrite(mline, s_o_s);
---		  writeline(output, mline);
---		  
---		  s_i_s <= x"0763E66A"; -- to code
---		  wait for clk_period;
---		  
---		  while s_out_ok = '0' loop
---			wait for clk_period;
---		  end loop;
---		  
---		  hwrite(mline, s_o_s);
---		  writeline(output, mline);
---		  
---		  s_i_s <= x"3AD95505"; -- to code
---		  wait for clk_period;
---		  
---		  while s_out_ok = '0' loop
---			wait for clk_period;
---		  end loop;
---		  
---		  hwrite(mline, s_o_s);
---		  writeline(output, mline);
-		  -- s_i_s <= "11111111000000001111111100011110"; -- to decode
-		
-		  wait for 500000 ns;	  
+		  -- DECODING
+		  
+		  s_i_s <= x"075BCD38"; -- to code
+
+		  wait for clk_period;
+		  
+		  while s_out_ok = '0' loop
+			wait for clk_period;
+		  end loop;
+		  
+		  hwrite(mline, s_o_s);
+		  writeline(output, mline);
+		  
+		  wait for 10 us;
+		  
+		  s_i_s <= x"3ADE68A4"; -- to code
+		  
+		  wait for clk_period;
+		  
+		  while s_out_ok = '0' loop
+			wait for clk_period;
+		  end loop;
+		  
+		  hwrite(mline, s_o_s);
+		  writeline(output, mline);
+
+		  wait for 10 us;
+		  
+		  s_i_s <= x"0B7E775B"; -- to code
+		   wait for clk_period;
+		  
+		  while s_out_ok = '0' loop
+			wait for clk_period;
+		  end loop;
+		  
+		  hwrite(mline, s_o_s);
+		  writeline(output, mline);
+		  
+		  wait for 10 us;
+		  
+		  s_i_s <= x"36BBBE74"; -- to code
+		   wait for clk_period;
+		  
+		  while s_out_ok = '0' loop
+			wait for clk_period;
+		  end loop;
+		  
+		  hwrite(mline, s_o_s);
+		  writeline(output, mline);
+		 
+		  wait for 10 us;
 		  
 		  ENDSIM:=true;
         assert false report "end of test" severity note;

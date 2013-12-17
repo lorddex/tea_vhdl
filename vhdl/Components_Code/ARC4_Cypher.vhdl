@@ -110,8 +110,11 @@ begin
 				end if;
 		else
 			out_ok <= '0';
+			temp := x"00000000";
 			old_x <= 0;
 			old_j <= 0;
+			x:=0;
+			j:=0;
 			step <= "00";
 		end if;
 	end process;
