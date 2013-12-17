@@ -13,6 +13,7 @@ architecture behav of Tea_Sim is
 	 port (
 		  clk					: in std_logic;
 		  key             : in std_logic_vector(127 downto 0);
+		  reset				: in std_logic;
 		  status				: out std_logic_vector(2047 downto 0);
 		  ready				: out std_logic
 	 );
@@ -21,6 +22,7 @@ architecture behav of Tea_Sim is
 	constant clk_period : time := 10 ns;
 	
 	signal s_clk			  : std_logic:='0';
+	signal s_reset			  : std_logic;
 	signal s_key      	  : std_logic_vector (127 downto 0);
 	signal s_status		  : std_logic_vector(2047 downto 0);
 	signal s_ready			  : std_logic;
@@ -34,7 +36,8 @@ begin
 		      clk 	 => s_clk,
 				key 	 => s_key,
 				status => s_status,
-				ready  => s_ready
+				ready  => s_ready,
+				reset => s_reset
         );
 		  
 	 clock_proc: process 
@@ -55,7 +58,12 @@ begin
 -- 11101010101000000000000000000000 -> 3936354304
 -- 00101010101010101010101010100000 -> 715827872
 -- 00000000010101010101010101010101 -> 5592405	 
-			 
+		
+		  s_reset <= '1';
+		  wait for 20 ns;
+		  
+		  s_reset <= '0';
+		
 		  s_key <= "11110000001111111100000011111001111010101010000000000000000000000010101010101010101010101010000000000000010101010101010101010101";
 		
 		  wait for 500000 ns;

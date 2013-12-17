@@ -12,6 +12,7 @@ entity Tea is
         vi              : in std_logic_vector (63 downto 0);
 		  key             : in std_logic_vector(127 downto 0);
 		  mode            : in std_logic;
+		  reset				: in std_logic;
 		  vo       	      : out std_logic_vector (63 downto 0)
 	 );
 end entity Tea;
@@ -35,8 +36,20 @@ architecture behave of Tea is
 			  clk				   : in std_logic;
 			  key             : in std_logic_vector(127 downto 0);	-- key
 			  i_stream			: in std_logic_vector(31 downto 0);
-			  o_stream			: out std_logic_vector(31 downto 0)
+			  o_stream			: out std_logic_vector(31 downto 0);
+			  reset				: in std_logic;
+			  out_ok				: out std_logic
 		 );
+	end component;
+	
+	component Arc4_Ksa is
+	 port (
+		  clk					: in std_logic;
+		  key             : in std_logic_vector(127 downto 0);
+		  reset				: in std_logic;
+		  status				: out std_logic_vector(2047 downto 0);
+		  ready				: out std_logic
+	 );
 	end component;
 	
 	signal round				: unsigned(5 downto 0) := "000000";
@@ -55,6 +68,11 @@ architecture behave of Tea is
 	signal s_arc4_i 			:std_logic_vector(31 downto 0);
 	signal s_arc4_o 			:std_logic_vector(31 downto 0);
 	
+	signal s_key2      	  : std_logic_vector (127 downto 0);
+	signal s_status		  : std_logic_vector(2047 downto 0);
+	signal s_ready			  : std_logic;
+	signal s_out_ok		  : std_logic;
+	
 begin
 	
 	core1: TeaCore port map (
@@ -71,8 +89,19 @@ begin
 		clk => clk,
 		key 		=> s_arc4_key,
 	   i_stream	=> s_arc4_i,
-		o_stream	=> s_arc4_o
+		o_stream	=> s_arc4_o,
+		reset => reset,
+		out_ok => s_out_ok
 	);
+	
+	Arc_i2 : Arc4_Ksa
+        port map(
+		      clk => clk,
+				key 	 => s_key2,
+				status => s_status,
+				reset	=> reset,
+				ready => s_ready
+    );
 	
 	process (clk, vi, s_vo, s_sum_o) 
 		variable mline : line;

@@ -9,6 +9,7 @@ entity Arc4_Ksa is
     port (
 		  clk				   : in std_logic;
 		  key             : in std_logic_vector(127 downto 0);	-- key
+		  reset				: in std_logic;
 		  status				: out std_logic_vector(2047 downto 0);
 		  ready				: out std_logic
 	 );
@@ -26,11 +27,12 @@ architecture behave of Arc4_Ksa is
 	
 begin
 	
-	process (clk) 
+	process (clk, reset) 
 		variable mline : line;
 		variable j		: integer := 0;
 		variable temp	: unsigned(31 downto 0);
 	begin
+		if (reset = '0') then
 			if (rising_edge(clk)) then
 				if moment = "000" then
 					ready <= '0';
@@ -111,6 +113,10 @@ begin
 					ready <= '1';
 				end if;
 			end if;
+		else
+			cntr <= 0;
+			moment <= "000";
+		end if;
 	end process;
 	
 end behave;
