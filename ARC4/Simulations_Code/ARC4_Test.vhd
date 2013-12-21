@@ -5,10 +5,10 @@ use ieee.numeric_std.all;
 use STD.textio.all; 
 use IEEE.std_logic_textio.all;
 
-entity Tea_Sim is
-end Tea_Sim;
+entity ARC4_Sim is
+end ARC4_Sim;
 
-architecture behav of Tea_Sim is
+architecture behav of ARC4_Sim is
 
 	component Arc4_Cypher is
 	    port (

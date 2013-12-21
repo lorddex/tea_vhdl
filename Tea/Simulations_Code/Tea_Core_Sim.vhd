@@ -2,6 +2,9 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
+use STD.textio.all; 
+use IEEE.std_logic_textio.all;
+
 entity Tea_Sim is
 end Tea_Sim;
 
@@ -53,7 +56,9 @@ begin
 		end if;
 	 end process;	  	  
 		  
-    stim_proc: process begin
+    stim_proc: process 
+		variable mline: line;
+	 begin
 		  
 		  s_reset <= '1';
 		  wait for clk_period; 
@@ -65,6 +70,10 @@ begin
 		  while s_ready = '0' loop
 			wait for clk_period;
 		  end loop;
+		  
+		  write(mline, string'("vo: "));
+		  hwrite(mline, s_vo);
+		  writeline(output, mline);
 		  
 		  wait for 10*clk_period;
 		  
@@ -78,6 +87,10 @@ begin
 		  while s_ready = '0' loop
 			wait for clk_period;
 		  end loop;
+		  
+		  write(mline, string'("vo: "));
+		  hwrite(mline, s_vo);
+		  writeline(output, mline);
 		  
 		  wait for 10*clk_period;
 			
