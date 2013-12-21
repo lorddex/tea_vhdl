@@ -4,7 +4,7 @@
 #include <string.h>
 #include <inttypes.h>
 
-#define TEA	2
+#define TEA	1
 #define STREAM  1
 #define STREAM_DECODE 1
 
@@ -14,9 +14,7 @@
 #define DELTA       0x9e3779b9
 #define NUM_ROUNDS  32
 
-//unsigned int a, b, c;
-
-uint8_t key[] = { 128, 182, 218, 1, 139, 193, 19, 93 };
+uint8_t key[] = { 128, 182, 218, 1 };
 
 // 11110000001111111100000011111001 -> 4030710009
 // 11101010101000000000000000000000 -> 3936354304
@@ -24,7 +22,6 @@ uint8_t key[] = { 128, 182, 218, 1, 139, 193, 19, 93 };
 // 00000000010101010101010101010101 -> 5592405
 //uint32_t key2[] = { 4030710009, 3936354304, 715827872, 5592405 };
 uint32_t key2[] = { 5592405, 715827872, 3936354304, 4030710009 };
-//uint8_t key[KEY] = { 1, 0, 0, 0, 0, 0, 0, 0 };
 
 // RC4 - http://bradconte.com/rc4_c - https://github.com/B-Con/crypto-algorithms
 // Key Scheduling Algorithm 
@@ -60,10 +57,10 @@ void arc4_ksa(uint8_t *state, uint8_t *key)
       state[j] = t; 
    }
 	
-   printf("STATUS: ");
+/*   printf("STATUS: ");
    for (i=0; i<256; i++)
         printf("%02"PRIX8" ", state[i]);
-    printf("\n");
+    printf("\n");*/
 }
 
 // Pseudo-Random Generator Algorithm 
@@ -141,6 +138,7 @@ void tea_encrypt (uint32_t* v, uint8_t* k) {
         sum += delta;
         v0 += ((v1<<4) + k0) ^ (v1 + sum) ^ ((v1>>5) + k1);
         v1 += ((v0<<4) + k2) ^ (v0 + sum) ^ ((v0>>5) + k3);  
+	printf("Tea encoded values: v0=%08"PRIX8" v1=%08"PRIX8"\n", v0, v1);
     }                                              /* end cycle */
     v[0]=v0; v[1]=v1;
 }
@@ -190,6 +188,9 @@ int main() {
     printf("Data to encode: %08"PRIX8" %08"PRIX8"\n", v[0], v[1]);
 
     /* TEA */
+    for (i=0; i<4; i++)
+	printf("Key[%d]=%08"PRIX32" ", i, key[i]);
+    printf("\n");  
     tea_encrypt(v, key);
     printf("Tea encoded values: v0=%08"PRIX8" v1=%08"PRIX8"\n", v[0], v[1]);
 
