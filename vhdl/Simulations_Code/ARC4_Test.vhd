@@ -9,13 +9,7 @@ entity Tea_Sim is
 end Tea_Sim;
 
 architecture behav of Tea_Sim is
---	component Arc4_Ksa is
---	 port (
---		  key             : in std_logic_vector(127 downto 0);
---		  status				: out std_logic_vector(2047 downto 0);
---		  ready				: out std_logic
---	 );
---	end component;
+
 	component Arc4_Cypher is
 	    port (
 		  clk 			   : in std_logic;

@@ -11,7 +11,7 @@ entity TeaCore is
 		  mode				: in std_logic; 								-- 0 code 1 decode
 		  key             : in std_logic_vector(127 downto 0);	-- key
 		  vi      	      : in std_logic_vector (63 downto 0); 	-- input data
-		  enable				: in std_logic;								-- enable
+		  reset				: in std_logic;								-- enable
 		  vo      	      : out std_logic_vector (63 downto 0);	-- data output
 		  ready				: out std_logic
 	 );
@@ -30,15 +30,16 @@ architecture behave of TeaCore is
 	
 begin
 
-	process (clk, enable) 
+	process (clk, reset) 
 		variable mline : line;
 		variable sum : unsigned(31 downto 0);
 		variable do0 : unsigned(31 downto 0);
 		variable do1 : unsigned(31 downto 0);
 	begin
-		if (enable = '1') then
+		if (reset = '0') then
 			if (rising_edge(clk)) then
 				if (round = "00") then
+					
 					k3 <= unsigned(key(31 downto 0));
 					k2 <= unsigned(key(63 downto 32));
 					k1 <= unsigned(key(95 downto 64));
@@ -71,27 +72,27 @@ begin
 					vo(31 downto 0) <= std_logic_vector(do0);
 					vo(63 downto 32) <= std_logic_vector(do1);
 					-- debug code
-					write(mline, string'("di0="));
-					hwrite(mline, vi(63 downto 32));
-					write(mline, string'(" di1="));
-					hwrite(mline, vi(31 downto 0));
-					write(mline, string'(" k0="));
-					hwrite(mline, std_logic_vector(k0));
-					write(mline, string'(" k1="));
-					hwrite(mline, std_logic_vector(k1));
-					write(mline, string'(" k2="));
-					hwrite(mline, std_logic_vector(k2));
-					write(mline, string'(" k3="));
-					hwrite(mline, std_logic_vector(k3));
-					write(mline, string'("delta="));
-					hwrite(mline, std_logic_vector(delta));
-					write(mline, string'(" sum="));
-					hwrite(mline, std_logic_vector(sum));
-					write(mline, string'(" v0="));
-					hwrite(mline, std_logic_vector(do0));
-					write(mline, string'(" v1="));
-					hwrite(mline, std_logic_vector(do1));
-					writeline(output, mline);
+--					write(mline, string'("di0="));
+--					hwrite(mline, vi(63 downto 32));
+--					write(mline, string'(" di1="));
+--					hwrite(mline, vi(31 downto 0));
+--					write(mline, string'(" k0="));
+--					hwrite(mline, std_logic_vector(k0));
+--					write(mline, string'(" k1="));
+--					hwrite(mline, std_logic_vector(k1));
+--					write(mline, string'(" k2="));
+--					hwrite(mline, std_logic_vector(k2));
+--					write(mline, string'(" k3="));
+--					hwrite(mline, std_logic_vector(k3));
+--					write(mline, string'("delta="));
+--					hwrite(mline, std_logic_vector(delta));
+--					write(mline, string'(" sum="));
+--					hwrite(mline, std_logic_vector(sum));
+--					write(mline, string'(" v0="));
+--					hwrite(mline, std_logic_vector(do0));
+--					write(mline, string'(" v1="));
+--					hwrite(mline, std_logic_vector(do1));
+--					writeline(output, mline);
 					round <= "11";
 				elsif round = "11" then
 					ready <= '1';

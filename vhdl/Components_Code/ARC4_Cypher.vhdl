@@ -68,10 +68,10 @@ begin
 						elsif step = "10" then
 							x := old_x;
 							j := old_j;
-							write(mline, x);
-							write(mline, string'(" "));
-							write(mline, j);
-							writeline(output, mline);
+--							write(mline, x);
+--							write(mline, string'(" "));
+--							write(mline, j);
+--							writeline(output, mline);
 							old_in <= i_stream;
 							for i in 0 to 3 loop
 							x := (x + 1) mod 256;
