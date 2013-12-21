@@ -8,55 +8,82 @@ end Tea_Sim;
 architecture behav of Tea_Sim is
 	component TeaCore is
 	 port (
+		  clk					: in std_logic;
 		  mode				: in std_logic; 								-- 0 code 1 decode
 		  key             : in std_logic_vector(127 downto 0);	-- key
 		  vi      	      : in std_logic_vector (63 downto 0); 	-- input data
-		  sum_i 				: in std_logic_vector(31 downto 0);		-- sum input
 		  enable				: in std_logic;								-- enable
 		  vo      	      : out std_logic_vector (63 downto 0);	-- data output
-		  sum_o 				: out std_logic_vector(31 downto 0)		-- sum output
+		  ready 				: out std_logic
 	 );
 	end component;
-
+	
+	constant clk_period : time := 10 ns;
+	
+	signal s_clk			  : std_logic:='0';
 	signal s_vi      	  	  : std_logic_vector (63 downto 0);
 	signal s_vo      	     : std_logic_vector (63 downto 0);
 	signal s_key      	  : std_logic_vector (127 downto 0);
-   signal s_sum_i			  : std_logic_vector (31 downto 0);
-	signal s_sum_o			  : std_logic_vector (31 downto 0);
 	signal s_mode			  : std_logic;
 	signal s_enable		  : std_logic;
+	signal s_ready			  : std_logic;
+	
+	shared variable ENDSIM	: boolean:=false;	
 	
 begin
 
     Tea_i : TeaCore
         port map(
-				vi		=> s_vi,
-				vo		=> s_vo,
-				key	=> s_key,
-				sum_i => s_sum_i,
-				sum_o => s_sum_o,
-				mode => s_mode,
-				enable => s_enable
+				clk    => s_clk,
+				vi		 => s_vi,
+				vo		 => s_vo,
+				key	 => s_key,
+				mode   => s_mode,
+				enable => s_enable,
+				ready  => s_ready
         );
+		  
+	 clock_proc: process 
+ 	 begin
+		if ENDSIM=false then
+			wait for clk_period/2;
+			s_clk<=NOT s_clk;
+		else
+			wait;
+		end if;
+	 end process;	  	  
 		  
     stim_proc: process begin
 		  
-		  s_enable <= '1';
+		  s_enable <= '0';
+		  wait for clk_period;
 		  
 		  s_mode <= '0';
-		  s_sum_i <= "00000000000000000000000000000000";
-		  s_key <= std_logic_vector(to_unsigned(19860503, s_key'length));
-		  s_vi <= std_logic_vector(to_unsigned(128, s_vi'length));
-		
-		  wait for 10 ns;
-	 
+		  
+		  s_key <= x"00000080000000B6000000DA00000001";
+		  s_vi <= x"0000008000000000";
+		  s_enable <= '1';
+		  
+		  while s_ready = '0' loop
+			wait for clk_period;
+		  end loop;
+		  
+		  wait for 10*clk_period;
+		  
+		  s_enable <= '0';
+		  wait for clk_period;
 		  s_mode <= '1';
-		  s_sum_i <= "00000000000000000000000000000000";
-		  s_key <= std_logic_vector(to_unsigned(19860503, s_key'length));
-		  s_vi <= std_logic_vector(to_unsigned(128, s_vi'length));
-	 
-		  wait for 10 ns;
-	 
+		  s_key <= x"00000080000000B6000000DA00000001";
+		  s_vi <= x"984F4C63BB71CCCE";
+		  s_enable <= '1';
+		  
+		  while s_ready = '0' loop
+			wait for clk_period;
+		  end loop;
+		  
+		  wait for 10*clk_period;
+			
+        ENDSIM:=true;
         assert false report "end of test" severity note;
         wait;
 		  

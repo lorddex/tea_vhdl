@@ -15,6 +15,7 @@ architecture behav of Tea_Sim is
         vi              : in std_logic_vector (63 downto 0);
 		  key             : in std_logic_vector(127 downto 0);
 		  mode            : in std_logic;
+		  reset				: in std_logic;
 		  vo       	      : out std_logic_vector (63 downto 0)
 		);
 	end component;
@@ -27,6 +28,7 @@ architecture behav of Tea_Sim is
 	signal s_vo      	     : std_logic_vector (63 downto 0);
 	signal s_key      	  : std_logic_vector (127 downto 0);
    signal s_mode			  : std_logic;
+	signal s_reset			  : std_logic;
 		
 	shared variable ENDSIM	: boolean:=false;	
 	 
@@ -39,7 +41,8 @@ begin
 				mode 	 => s_mode,
 				vi		 => s_vi,
 				vo		 => s_vo,
-				key	 => s_key
+				key	 => s_key,
+				reset	 => s_reset
         );
 		  
 	 clock_proc: process 

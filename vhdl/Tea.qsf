@@ -70,8 +70,8 @@ set_global_assignment -name VHDL_FILE Components_Code/ARC4_Cypher.vhdl
 set_global_assignment -name EDA_TEST_BENCH_NAME ARC4_Status -section_id eda_simulation
 set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id ARC4_Status
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME Tea_Sim -section_id ARC4_Status
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
 set_global_assignment -name EDA_TEST_BENCH_FILE Simulations_Code/Tea_Core_Sim.vhd -section_id TeaCore_Test
 set_global_assignment -name EDA_TEST_BENCH_FILE Simulations_Code/Tea_Sim.vhdl -section_id Test_Tea
 set_global_assignment -name EDA_TEST_BENCH_FILE Simulations_Code/ARC4_Test.vhd -section_id ARC4_Test
 set_global_assignment -name EDA_TEST_BENCH_FILE Simulations_Code/Arc4_KSA_Test.vhd -section_id ARC4_Status
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

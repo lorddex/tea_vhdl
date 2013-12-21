@@ -21,13 +21,13 @@ architecture behave of Tea is
 
 	component TeaCore is
 		 port (
+		     clk				: in std_logic;
 			  mode			: in std_logic; 								-- 0 code 1 decode
 			  key          : in std_logic_vector(127 downto 0);	-- key
 		     vi      	   : in std_logic_vector (63 downto 0); 	-- input data
-		     sum_i 			: in std_logic_vector(31 downto 0);		-- sum input
 			  enable			: in std_logic;
 		     vo      	   : out std_logic_vector (63 downto 0);	-- data output
-		     sum_o 			: out std_logic_vector(31 downto 0) 	-- sum output
+		     ready 			: out std_logic 
 		 );
 	end component;
 	
@@ -54,15 +54,13 @@ architecture behave of Tea is
 	
 	signal round				: unsigned(5 downto 0) := "000000";
 	
-	signal s_sum_i				: std_logic_vector(31 downto 0);
-	signal s_sum_o				: std_logic_vector(31 downto 0);
 	signal s_vi					: std_logic_vector(63 downto 0);
 	signal s_mode				: std_logic;
 	signal s_key				: std_logic_vector(127 downto 0);
 	signal s_vo					: std_logic_vector(63 downto 0);
 	
 	signal s_enable			: std_logic;
-	
+	signal s_ready_tea		: std_logic;
 	
 	signal s_arc4_key			:std_logic_vector(127 downto 0);
 	signal s_arc4_i 			:std_logic_vector(31 downto 0);
@@ -70,19 +68,19 @@ architecture behave of Tea is
 	
 	signal s_key2      	  : std_logic_vector (127 downto 0);
 	signal s_status		  : std_logic_vector(2047 downto 0);
-	signal s_ready			  : std_logic;
+	signal s_ready_arc	  : std_logic;
 	signal s_out_ok		  : std_logic;
 	
 begin
 	
 	core1: TeaCore port map (
+		clk => clk,
 		mode => mode,
 		key => key,
-		vi => s_vi,
-		sum_i => s_sum_i,
+		vi => s_vi,		
 		vo => s_vo,
-		sum_o => s_sum_o,
-		enable => s_enable
+		enable => s_enable,
+		ready => s_ready_tea
 	);
 	
 	arc4_1: Arc4_Cypher port map (
@@ -100,10 +98,10 @@ begin
 				key 	 => s_key2,
 				status => s_status,
 				reset	=> reset,
-				ready => s_ready
+				ready => s_ready_arc
     );
 	
-	process (clk, vi, s_vo, s_sum_o) 
+	process (clk, vi, s_vo) 
 		variable mline : line;
 	begin
 	
@@ -114,14 +112,12 @@ begin
 				s_enable <= '1';
 				
 				if (round = "000000") then
-						s_sum_i <= "00000000000000000000000000000000";
 						s_vi <= vi;
 				elsif (round = "100000") then
 						s_enable <= '0';
 						vo <= s_vo;
 				else 		
 						s_vi <= s_vo;
-						s_sum_i <= s_sum_o;
 				end if;
 				
 				round <= round + 1;
