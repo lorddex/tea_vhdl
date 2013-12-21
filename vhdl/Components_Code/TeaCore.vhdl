@@ -27,8 +27,6 @@ architecture behave of TeaCore is
 	signal delta			: unsigned(31 downto 0);
 	signal round			: std_logic_vector(1 downto 0);
 	signal ctr				: unsigned(5 downto 0);
-	signal di1				: unsigned(31 downto 0);
-	signal di0				: unsigned(31 downto 0);
 	
 begin
 
@@ -52,7 +50,7 @@ begin
 				elsif round = "01" then
 				   if mode = '0' and ctr="000000" then
 						sum := x"00000000";
-					elsif (mode = '1') then
+					elsif (mode = '1' and ctr="000000") then
 						sum := x"C6EF3720";
 					end if;
 						if ctr < "100000" then
@@ -74,9 +72,9 @@ begin
 					vo(63 downto 32) <= std_logic_vector(do1);
 					-- debug code
 					write(mline, string'("di0="));
-					hwrite(mline, std_logic_vector(di0));
+					hwrite(mline, vi(63 downto 32));
 					write(mline, string'(" di1="));
-					hwrite(mline, std_logic_vector(di1));
+					hwrite(mline, vi(31 downto 0));
 					write(mline, string'(" k0="));
 					hwrite(mline, std_logic_vector(k0));
 					write(mline, string'(" k1="));
@@ -103,8 +101,6 @@ begin
 			ready <= '0';
 			round <= "00";
 			sum := x"00000000";
-			di0 <= x"00000000";
-			di1 <= x"00000000";
 			do0 := x"00000000";
 			do1 := x"00000000";
 			ctr <= "000000";
