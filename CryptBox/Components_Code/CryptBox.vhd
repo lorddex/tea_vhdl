@@ -107,6 +107,7 @@ begin
 				ready <= s_arc_ready;
 			else
 				ready <= '0';
+				vo <= "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ";
 			end if;
 		end if;
 		
