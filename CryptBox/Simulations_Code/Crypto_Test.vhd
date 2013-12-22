@@ -78,24 +78,166 @@ begin
 			wait for clk_period;
 		  end loop;
 		  
-		  hwrite(mline, s_vo);
-		  writeline(output, mline);
+		  write(mline, string'("enc stream: "));
+		  hwrite(mline, s_vo(63 downto 32));
 		  
 		  wait for 10 * clk_period;
 		 
-		  s_mode <= "00";
+		  -- s_mode <= "00";
 		  s_reset <= '1';
-		  s_key <= x"00000080000000B6000000DA00000001";
-		  s_vi <= x"0000008000000000";
+		  s_vi <= x"3ADE68B100000000"; -- to code
+		  --s_key <= x"00000080000000B6000000DA00000001";
+		  --s_vi <= x"0000008000000000";
+		  wait for clk_period;
 		  s_reset <= '0';
 		  
 		  while s_ready = '0' loop
 			wait for clk_period;
 		  end loop;
 		  
-		  write(mline, string'("vo: "));
-		  hwrite(mline, s_vo);
+		  write(mline, string'(" "));
+		  hwrite(mline, s_vo(63 downto 32));
+		  
+		  -- s_mode <= "00";
+		  s_reset <= '1';
+		  s_vi <= x"0B7E775900000000"; -- to code
+		  --s_key <= x"00000080000000B6000000DA00000001";
+		  --s_vi <= x"0000008000000000";
+		  wait for clk_period;
+		  s_reset <= '0';
+		  
+		  while s_ready = '0' loop
+			wait for clk_period;
+		  end loop;
+		  
+		  write(mline, string'(" "));
+		  hwrite(mline, s_vo(63 downto 32));
+		  
+		  -- s_mode <= "00";
+		  s_reset <= '1';
+		  s_vi <= x"36BBBE6D00000000"; -- to code
+		  --s_key <= x"00000080000000B6000000DA00000001";
+		  --s_vi <= x"0000008000000000";
+		  wait for clk_period;
+		  s_reset <= '0';
+		  
+		  while s_ready = '0' loop
+			wait for clk_period;
+		  end loop;
+		  
+		  write(mline, string'(" "));
+		  hwrite(mline, s_vo(63 downto 32));
 		  writeline(output, mline);
+		  
+		  
+		  
+		  s_reset <= '1';
+		  s_vi <= x"75F916F100000000"; -- to code
+		  wait for clk_period;
+	
+		  s_reset <= '0';
+		 	
+		  -- ENCODING 	
+		 
+		  wait for clk_period;
+		  
+		  while s_ready = '0' loop
+			wait for clk_period;
+		  end loop;
+		  
+		  write(mline, string'("dec stream: "));
+		  hwrite(mline, s_vo(63 downto 32));
+		  
+		  wait for 10 * clk_period;
+		 
+		  -- s_mode <= "00";
+		  s_reset <= '1';
+		  s_vi <= x"FEBB7D8F00000000"; -- to code
+		  --s_key <= x"00000080000000B6000000DA00000001";
+		  --s_vi <= x"0000008000000000";
+		  wait for clk_period;
+		  s_reset <= '0';
+		  
+		  while s_ready = '0' loop
+			wait for clk_period;
+		  end loop;
+		  
+		  write(mline, string'(" "));
+		  hwrite(mline, s_vo(63 downto 32));
+		  
+		  -- s_mode <= "00";
+		  s_reset <= '1';
+		  s_vi <= x"F2F4EC3900000000"; -- to code
+		  --s_key <= x"00000080000000B6000000DA00000001";
+		  --s_vi <= x"0000008000000000";
+		  wait for clk_period;
+		  s_reset <= '0';
+		  
+		  while s_ready = '0' loop
+			wait for clk_period;
+		  end loop;
+		  
+		  write(mline, string'(" "));
+		  hwrite(mline, s_vo(63 downto 32));
+		  
+		  -- s_mode <= "00";
+		  s_reset <= '1';
+		  s_vi <= x"572DE51700000000"; -- to code
+		  --s_key <= x"00000080000000B6000000DA00000001";
+		  --s_vi <= x"0000008000000000";
+		  wait for clk_period;
+		  s_reset <= '0';
+		  
+		  while s_ready = '0' loop
+			wait for clk_period;
+		  end loop;
+		  
+		  write(mline, string'(" "));
+		  hwrite(mline, s_vo(63 downto 32));
+		  writeline(output, mline);
+		  
+		  
+		  
+		  
+		  
+		  -- TEA
+		  
+		  s_mode <= "00";
+		  s_reset <= '1';
+		  s_key <= x"00000080000000B6000000DA00000001";
+		  s_vi <= x"0000008000000000";
+		  wait for clk_period;
+		  s_reset <= '0';
+		  
+		  while s_ready = '0' loop
+			wait for clk_period;
+		  end loop;
+		  
+		  write(mline, string'("tea encoded: "));
+		  hwrite(mline, s_vo(63 downto 32));
+		  write(mline, string'(" "));
+		  hwrite(mline, s_vo(31 downto 0));
+		  writeline(output, mline);
+		  
+		  s_mode <= "01";
+		  s_reset <= '1';
+		  s_vi <= x"984F4C63BB71CCCE";
+		  wait for clk_period;
+		  s_reset <= '0';
+		  
+		   while s_ready = '0' loop
+			wait for clk_period;
+		  end loop;
+		  
+		  write(mline, string'("tea decoded: "));
+		  hwrite(mline, s_vo(63 downto 32));
+		  write(mline, string'(" "));
+		  hwrite(mline, s_vo(31 downto 0));
+		  writeline(output, mline);
+		  
+		  --s_vi <= x"0B7E775900000000"; -- to code
+		  --s_vi <= x"36BBBE6D00000000"; -- to code
+		  
 --		  s_i_s <= x"3ADE68B1"; -- to code
 --		  
 --		  wait for clk_period;

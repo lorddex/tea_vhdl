@@ -89,21 +89,21 @@ begin
 --							writeline(output, mline);
 							old_in <= i_stream;
 							for i in 0 to 3 loop
-							x := (x + 1) mod 256;
-							j := (j + to_integer(s_status_a(x))) mod 256;
-							temp := s_status_a(x);
-							s_status_a(x) <= s_status_a(j);
-							s_status_a(j) <= temp;
-							t_int := to_integer((s_status_a(x) + s_status_a(j)) mod 256);
-							if i = 0 then
-								t_s := x"000000" & s_status_a(t_int);
-							elsif i = 1 then
-								t_s := (x"0000" & s_status_a(t_int) & t_s(7 downto 0));
-							elsif i = 2 then
-								t_s := (x"00" & s_status_a(t_int) & t_s(15 downto 0));
-							elsif i = 3 then
-								t_s := (s_status_a(t_int) & t_s(23 downto 0));
-							end if;
+								x := (x + 1) mod 256;
+								j := (j + to_integer(s_status_a(x))) mod 256;
+								temp := s_status_a(x);
+								s_status_a(x) <= s_status_a(j);
+								s_status_a(j) <= temp;
+								t_int := to_integer((s_status_a(x) + s_status_a(j)) mod 256);
+								if i = 0 then
+									t_s := x"000000" & s_status_a(t_int);
+								elsif i = 1 then
+									t_s := (x"0000" & s_status_a(t_int) & t_s(7 downto 0));
+								elsif i = 2 then
+									t_s := (x"00" & s_status_a(t_int) & t_s(15 downto 0));
+								elsif i = 3 then
+									t_s := (s_status_a(t_int) & t_s(23 downto 0));
+								end if;
 							end loop;
 							old_x <= x;
 							old_j <= j;

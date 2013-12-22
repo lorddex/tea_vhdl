@@ -23,7 +23,7 @@ architecture behave of Arc4_Ksa is
    signal s_key  		  		: key_array;
    signal s_status 			: status_array;
 	signal moment				: std_logic_vector(2 downto 0) := "000";
---	signal cntr					: integer:=0;
+	signal ctr					: integer;
 	
 begin
 	
@@ -44,31 +44,39 @@ begin
 					end loop;
 					moment <= "010";
 				elsif moment = "010" then			
---					if (cntr < 256) then
-					for i in 0 to 255 loop
-						temp := (to_unsigned(j, 8) + s_status(i) + s_key(i mod 16)) mod 256;
---						j := i;
-						temp := s_status(i);
-						s_status(i) <= s_status(j);
-						s_status(j) <= temp;
---						if (cntr=255) then
---							
---						else
---							cntr <= cntr + 1;
---						end if;
-					end loop;
-					moment <= "011";
---					end if;
+--					for i in 0 to 255 loop
+--						temp := (to_unsigned(j, 8) + s_status(i) + s_key(i mod 16)) mod 256;
+--						j := to_integer(temp);
+--						temp := s_status(i);
+--						s_status(i) <= s_status(j);
+--						s_status(j) <= temp;
+--					end loop;
+--					moment <= "011";
+						if (ctr < 256) then
+							temp := (to_unsigned(j, 8) + s_status(ctr) + s_key(ctr mod 16)) mod 256;
+							j := to_integer(temp);
+							temp := s_status(ctr);
+							s_status(ctr) <= s_status(j);
+							s_status(j) <= temp;
+							if (ctr=255) then
+								moment <= "011";
+							else
+								ctr <= ctr + 1;
+							end if;
+					end if;
 				elsif moment = "011" then
 					for i in 1 to 256 loop
 						status((i*8 -1) downto ((i-1)*8)) <= std_logic_vector(s_status(i-1));	
+--						hwrite(mline, std_logic_vector(s_status(i-1)));
+--						write(mline, string'(" "));
 					end loop;
+--					writeline(output, mline);
 					moment <= "100";
 					ready <= '1';
 				end if;
 			end if;
 		else
---			cntr <= 0;
+			ctr <= 0;
 			j := 0;
 			temp := x"00";
 			moment <= "000";

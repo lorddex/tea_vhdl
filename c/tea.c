@@ -120,46 +120,46 @@ void tea_decrypt (uint32_t* v, uint8_t* k) {
 int main() {
 
     uint32_t v[] = {128, 0};
-    uint32_t s[] = {123456789, 987654321, 192837465, 918273645, 123987564, 987321645, 25, 10};
+    uint32_t s[] = {123456789, 987654321, 192837465, 918273645};
 
     int i;
 #if TEA == 1
-    printf("Data to encode: %08"PRIX8" %08"PRIX8"\n", v[0], v[1]);
+    printf("Data to encode:    \t%08"PRIX8"\t%08"PRIX8"\n", v[0], v[1]);
 
     /* TEA */
-    for (i=0; i<4; i++)
+/*    for (i=0; i<4; i++)
 	printf("Key[%d]=%08"PRIX32" ", i, key[i]);
-    printf("\n");  
+    printf("\n");  */
     tea_encrypt(v, key);
-    printf("Tea encoded values: v0=%08"PRIX8" v1=%08"PRIX8"\n", v[0], v[1]);
+    printf("Tea encoded values:\t%08"PRIX8" \t%08"PRIX8"\n", v[0], v[1]);
 
     tea_decrypt(v, key);
-    printf("Tea decoded values: v0=%08"PRIX8" %08"PRIX8"\n", v[0], v[1]);
+    printf("Tea decoded values:\t%08"PRIX8"\t%08"PRIX8"\n", v[0], v[1]);
 #endif
 
 #if STREAM == 1
     /* ARC4 */
-    printf("Stream to encode: ");
-    for (i=0;i<6;i++)
-        printf("%08"PRIX8" ", s[i]);
+    printf("\n\nStream to encode:\t");
+    for (i=0;i<4;i++)
+        printf("%08"PRIX8"\t", s[i]);
     printf("\n");
 
-    arc4_encrypt(s, key2, 6);
-    printf("RC4 encoded values: ");
-    for (i=0;i<6;i++)
-        printf("%08"PRIX8" ", s[i]);
+    arc4_encrypt(s, key2, 4);
+    printf("RC4 encoded values:\t");
+    for (i=0;i<4;i++)
+        printf("%08"PRIX8"\t", s[i]);
     printf("\n");
 
 #if STREAM_DECODE == 1
-    printf("Stream to decode: ");
-    for (i=0;i<6;i++)
-        printf("%08"PRIX8" ", s[i]);
+    printf("Stream to decode:\t");
+    for (i=0;i<4;i++)
+        printf("%08"PRIX8"\t", s[i]);
     printf("\n");
 
-    arc4_encrypt(s, key2, 6);
-    printf("RC4 decoded values: ");
-    for (i=0;i<6;i++)
-        printf("%08"PRIX8" ", s[i]);
+    arc4_encrypt(s, key2, 4);
+    printf("RC4 decoded values:\t");
+    for (i=0;i<4;i++)
+        printf("%08"PRIX8"\t", s[i]);
     printf("\n");
 #endif
 #endif
