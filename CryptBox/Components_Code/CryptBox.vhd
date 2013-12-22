@@ -75,7 +75,7 @@ begin
 
 	process (vi, mode) begin
 	
-		if (mode(1) = '0') then
+		if (mode(1) = '1') then
 			s_arc_vi <= vi(63 downto 32);
 		end if;
 	
@@ -98,11 +98,12 @@ begin
 		variable mline : line;
 	begin
 		if rising_edge(clk) then
-			if mode(1) = '1' and s_tea_ready = '1' then
+			if mode(1) = '0' and s_tea_ready = '1' then
 				vo <= s_tea_vo;
 				ready <= s_tea_ready;
 			elsif mode(1) = '1' and s_arc_ready = '1' then
 				vo(63 downto 32) <= s_arc_vo;
+				vo(31 downto 0) <= x"00000000";
 				ready <= s_arc_ready;
 			else
 				ready <= '0';
