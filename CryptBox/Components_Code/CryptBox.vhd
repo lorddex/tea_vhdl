@@ -36,9 +36,9 @@ architecture behave of CryptBox is
 		  clk					: in std_logic;
 		  key             : in std_logic_vector(127 downto 0);	-- key
 		  reset				: in std_logic;
-		  i_stream			: in std_logic_vector(31 downto 0);
-		  o_stream			: out std_logic_vector(31 downto 0);
-		  out_ok				: out std_logic
+		  vi			: in std_logic_vector(31 downto 0);
+		  vo			: out std_logic_vector(31 downto 0);
+		  ready				: out std_logic
 	 );
 	end component;
 	
@@ -68,9 +68,9 @@ begin
 		clk 		=> clk,
 		key 		=> key,
 	   reset		=> s_arc_reset,
-		i_stream => s_arc_vi,
-		o_stream => s_arc_vo,
-		out_ok	=> s_arc_ready
+		vi => s_arc_vi,
+		vo => s_arc_vo,
+		ready	=> s_arc_ready
 	);
 
 	process (vi, mode) begin
@@ -94,7 +94,7 @@ begin
 	
 	end process;
 	
-	process (clk, s_tea_ready, s_arc_ready) 
+	process (clk) 
 		variable mline : line;
 	begin
 		if rising_edge(clk) then
@@ -107,7 +107,6 @@ begin
 				ready <= s_arc_ready;
 			else
 				ready <= '0';
-				vo <= "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ";
 			end if;
 		end if;
 		

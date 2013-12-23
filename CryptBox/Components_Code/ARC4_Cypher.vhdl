@@ -10,9 +10,9 @@ entity Arc4_Cypher is
 		  clk					: in std_logic;
 		  key             : in std_logic_vector(127 downto 0);	-- key
 		  reset				: in std_logic;
-		  i_stream			: in std_logic_vector(31 downto 0);
-		  o_stream			: out std_logic_vector(31 downto 0);
-		  out_ok				: out std_logic
+		  vi					: in std_logic_vector(31 downto 0);
+		  vo					: out std_logic_vector(31 downto 0);
+		  ready				: out std_logic
 	 );
 end entity Arc4_Cypher;
 
@@ -32,7 +32,7 @@ architecture behave of Arc4_Cypher is
 				
    signal s_status_a			: status_array;
 	signal s_status 			: std_logic_vector(2047 downto 0);
-	signal step					: std_logic_vector(1 downto 0) := "00";	
+	signal round				: std_logic_vector(1 downto 0) := "00";	
 	signal s_ready				: std_logic;
 	signal old_in				: std_logic_vector(31 downto 0);
 	signal old_x				: integer := 0;
@@ -59,20 +59,16 @@ begin
 			if reset = '0' then
 				if (s_ready = '1') then
 					if (rising_edge(clk)) then
-						if step = "00" then
-							step <= "00";
+						if round = "00" then
+							round <= "00";
 							for i in 1 to 256 loop
 								s_status_a(i-1) <= unsigned(s_status((i*8 -1) downto ((i-1)*8)));
 							end loop;
-							step <= "10";
-						elsif step = "10" then
+							round <= "01";
+						elsif round = "01" then
 							x := old_x;
 							j := old_j;
---							write(mline, x);
---							write(mline, string'(" "));
---							write(mline, j);
---							writeline(output, mline);
-							old_in <= i_stream;
+							old_in <= vi;
 							for i in 0 to 3 loop
 								x := (x + 1) mod 256;
 								j := (j + to_integer(s_status_a(x))) mod 256;
@@ -92,20 +88,19 @@ begin
 							end loop;
 							old_x <= x;
 							old_j <= j;
-							o_stream <= std_logic_vector(unsigned(i_stream) xor t_s);
-							step <= "11";
-						elsif step = "11" then		
-							if old_in /= i_stream then
-								step <= "00";
-								out_ok <= '0';
-							else	
-								out_ok <= '1';
+							vo <= std_logic_vector(unsigned(vi) xor t_s);
+							ready <= '1';
+							round <= "10";
+						elsif round = "10" then		
+							if old_in /= vi then
+								round <= "00";
+								ready <= '0';
 							end if;
 						end if;
 					end if;
 				end if;
 		else
-			out_ok <= '0';
+			ready <= '0';
 			t_int := 0;
 			t_s := x"00000000";
 			temp := x"00";
@@ -113,7 +108,7 @@ begin
 			old_j <= 0;
 			x:=0;
 			j:=0;
-			step <= "00";
+			round <= "00";
 		end if;
 	end process;
 	

@@ -39,7 +39,6 @@ begin
 		if (reset = '0') then
 			if (rising_edge(clk)) then
 				if (round = "00") then
-					
 					k3 <= unsigned(key(31 downto 0));
 					k2 <= unsigned(key(63 downto 32));
 					k1 <= unsigned(key(95 downto 64));
@@ -93,9 +92,7 @@ begin
 --					write(mline, string'(" v1="));
 --					hwrite(mline, std_logic_vector(do1));
 --					writeline(output, mline);
-					round <= "11";
-				elsif round = "11" then
-					ready <= '1';
+					ready <= '1';				
 				end if;
 			end if;
 		else

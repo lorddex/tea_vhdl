@@ -102,18 +102,6 @@ begin
 		  
 		  write(mline, string'(" "));
 		  hwrite(mline, s_vo(63 downto 32));
-		  
-		  wait for 10 * clk_period;
-		  
-		  s_vi <= x"36BBBE6D00000000"; -- value 4
-		  wait for 2*clk_period; -- important to wait for s_ready to be set to 0
-		  
-		  while s_ready = '0' loop
-			wait for clk_period;
-		  end loop;
-		  
-		  write(mline, string'(" ")); -- print report
-		  hwrite(mline, s_vo(63 downto 32));
 		  writeline(output, mline);
 		  
 		  wait for 10 * clk_period;
@@ -156,20 +144,8 @@ begin
 		  
 		  write(mline, string'(" "));
 		  hwrite(mline, s_vo(63 downto 32));
-
-		  wait for 10 * clk_period;
-		  
-		  s_vi <= x"572DE51700000000"; -- value 4
-		  wait for 2*clk_period; -- important to wait for s_ready to be set to 0
-		  
-		  while s_ready = '0' loop
-			wait for clk_period;
-		  end loop;
-		  
-		  write(mline, string'(" "));
-		  hwrite(mline, s_vo(63 downto 32));
 		  writeline(output, mline);
-		  
+			
 		  wait for 10 * clk_period;
 		  
 		  -- TEA ENCODE
