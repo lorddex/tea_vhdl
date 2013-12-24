@@ -57,10 +57,10 @@ void arc4_ksa(uint8_t *state, uint8_t *key)
       state[j] = t; 
    }
 	
-/*   printf("STATUS: ");
-   for (i=0; i<256; i++)
-        printf("%02"PRIX8" ", state[i]);
-    printf("\n");*/
+ //  printf("STATUS: ");
+ //  for (i=0; i<256; i++)
+ //       printf("%02"PRIX8" ", state[i]);
+ //   printf("\n");
 }
 
 // Pseudo-Random Generator Algorithm 
@@ -79,7 +79,8 @@ void arc4_prga(uint8_t *state, uint8_t *out, int len)
       t = state[i]; 
       state[i] = state[j]; 
       state[j] = t; 
-//      printf("Switching %d with %d\n t = %d\n", i, j, (state[i]+state[j]) %256); 
+   //   if (i == 14 && j == 3)
+//	printf("Switching %d with %d\n t = %d val_i=%2X val_j=%2X\n", i, j, (state[i]+state[j]) %256, state[i], state[j]); 
       out[x] ^= state[(state[i] + state[j]) % 256];
    }
 }  

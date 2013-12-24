@@ -38,6 +38,7 @@ architecture behave of Arc4_Cypher is
 	signal old_x				: integer := 0;
 	signal old_j				: integer := 0;
 	signal s_votmp				: std_logic_vector(63 downto 0);
+	signal continue			: std_logic;
 --	signal ctr2					: unsigned(2 downto 0);
 --	signal j						: integer;
 --	signal x						: integer;
@@ -72,10 +73,13 @@ begin
 				if (s_ready = '1') then
 					if (rising_edge(clk)) then
 						if round = "0000" then
-							round <= "0000";
-							for i in 1 to 256 loop
-								s_status_a(i-1) <= unsigned(s_status((i*8 -1) downto ((i-1)*8)));
-							end loop;
+							if continue = '0' then							
+								for i in 1 to 256 loop
+									s_status_a(i-1) <= unsigned(s_status((i*8 -1) downto ((i-1)*8)));
+									--hwrite(mline, s_status((i*8 -1) downto ((i-1)*8)));
+								end loop;
+							end if;
+							--writeline(output, mline);
 							round <= "0001";
 						elsif round >= "0001" and round <= "1000" then
 							if round = "0001" then
@@ -85,21 +89,43 @@ begin
 							end if;
 							x := old_x; 
 							j := old_j; 
+--							write(mline, string'("old_x="));
+--							write(mline, x);
+--							write(mline, string'(" old_j="));
+--							write(mline, j);
 							x := (x + 1) mod 256;
 							j := (j + to_integer(s_status_a(x))) mod 256;
+--							write(mline, string'(" switch_x="));
+--							write(mline, x);
+--							write(mline, string'(" with_j="));
+--							write(mline, j);
 							old_x_val := s_status_a(x);
 							old_j_val := s_status_a(j);
+--							write(mline, string'(" old_val_x="));
+--							hwrite(mline, std_logic_vector(old_x_val));
+--							write(mline, string'(" old_val_j="));
+-- 							hwrite(mline, std_logic_vector(old_j_val));
 							s_status_a(x) <= old_j_val;
 							s_status_a(j) <= old_x_val;
 							t_int := to_integer((old_x_val + old_j_val) mod 256);
+--							write(mline, string'(" t_int="));
+--							write(mline, t_int);
 							i := to_integer((unsigned(round)-1) mod 4);
+--							write(mline, string'(" i="));
+--							write(mline, i);
 							if (t_int = x) then
+--							write(mline, string'(" tmp1="));
 								tmp := old_j_val;
 							elsif (t_int = j) then
+--							write(mline, string'(" tmp2="));
 								tmp := old_x_val;
 							else
+--							write(mline, string'(" tmp3="));
 								tmp := s_status_a(t_int);
 							end if;
+--							hwrite(mline, std_logic_vector(tmp));
+--							write(mline, string'(" old_t_s="));
+--							hwrite(mline, std_logic_vector(t_s));
 							if i = 0 then
 								t_s := x"000000" & tmp;
 							elsif i = 1 then
@@ -109,12 +135,9 @@ begin
 							elsif i = 3 then
 								t_s := (tmp & t_s(23 downto 0));
 							end if;
-							write(mline, string'("t_int="));
-							write(mline, t_int);
-							write(mline, string'(" i="));
-							write(mline, i);
-							write(mline, string'(" t_s="));
-							write(mline, to_integer(t_s));
+--							write(mline, string'(" new_t_s="));
+--							hwrite(mline, std_logic_vector(t_s));
+							
 							writeline(output, mline);
 							old_x <= x;
 							old_j <= j;
@@ -137,6 +160,7 @@ begin
 								round <= "0000";
 								ready <= '0';
 								s_votmp <= x"0000000000000000";
+								continue <= '1';
 							end if;
 						end if;
 					end if;
@@ -153,6 +177,7 @@ begin
 			x:=0;
 			j:=0;
 			round <= "0000";
+			continue <= '0';
 		end if;
 	end process;
 	

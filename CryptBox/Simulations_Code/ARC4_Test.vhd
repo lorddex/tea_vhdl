@@ -112,7 +112,7 @@ begin
 		  
 		  wait for 10*clk_period;
 		  
-		  s_i_s <= x"6196037AF2F4EC39";
+		  s_i_s <= x"61965B7AF2F4EC39";
 		   wait for clk_period;
 		  
 		  while s_ready = '0' loop

@@ -8,7 +8,7 @@ use IEEE.std_logic_textio.all;
 entity Arc4_Ksa is
     port (
 		  clk				   : in std_logic;
-		  key             : in std_logic_vector(127 downto 0);	-- key
+		  key             : in std_logic_vector(127 downto 0);
 		  reset				: in std_logic;
 		  status				: out std_logic_vector(2047 downto 0);
 		  ready				: out std_logic

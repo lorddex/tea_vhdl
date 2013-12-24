@@ -67,7 +67,7 @@ begin
 		  s_reset <= '1';	 -- RESET ARC
 		  wait for 2* clk_period;
 		  s_key <= "11110000001111111100000011111001111010101010000000000000000000000010101010101010101010101010000000000000010101010101010101010101"; --KEY
-		  s_vi <= x"075BCD1500000000"; -- value 1
+		  s_vi <= x"3ADE68B1075BCD15"; -- value 1
 		  s_reset <= '0';
 		 
 		  wait for 2*clk_period; -- important to wait for s_ready to be set to 0
@@ -77,11 +77,11 @@ begin
 		  end loop;
 		  
 		  write(mline, string'("enc stream: "));
-		  hwrite(mline, s_vo(63 downto 32));
+		  hwrite(mline, s_vo);
 		  
 		  wait for 10 * clk_period;
 		 
-		  s_vi <= x"3ADE68B100000000"; -- value 2
+		  s_vi <= x"000000000B7E7759"; -- value 2
 		  wait for 2*clk_period; -- important to wait for s_ready to be set to 0
 		  
 		  while s_ready = '0' loop
@@ -89,19 +89,7 @@ begin
 		  end loop;
 		  
 		  write(mline, string'(" "));
-		  hwrite(mline, s_vo(63 downto 32));
-		  
-		  wait for 10 * clk_period;
-		  
-		  s_vi <= x"0B7E775900000000"; -- value 3
-		  wait for 2*clk_period; -- important to wait for s_ready to be set to 0
-		  
-		  while s_ready = '0' loop
-			wait for clk_period;
-		  end loop;
-		  
-		  write(mline, string'(" "));
-		  hwrite(mline, s_vo(63 downto 32));
+		  hwrite(mline, s_vo);
 		  writeline(output, mline);
 		  
 		  wait for 10 * clk_period;
@@ -110,7 +98,7 @@ begin
 		  
 		  s_reset <= '1';
 		  wait for 2* clk_period;
-		  s_vi <= x"75F916F100000000"; -- value 1
+		  s_vi <= x"FEBB7D8F75F916F1"; -- value 1
 		  s_reset <= '0';
 		  wait for 2* clk_period;
 		  
@@ -119,11 +107,12 @@ begin
 		  end loop;
 		  
 		  write(mline, string'("dec stream: "));
-		  hwrite(mline, s_vo(63 downto 32));
+		  hwrite(mline, s_vo);
+		  writeline(output, mline);
 		  
 		  wait for 10 * clk_period;
 		 
-		  s_vi <= x"FEBB7D8F00000000"; -- value 2
+		  s_vi <= x"61965B7AF2F4EC39"; -- value 2
 		  wait for 2*clk_period; -- important to wait for s_ready to be set to 0
 		  
 		  while s_ready = '0' loop
@@ -131,19 +120,7 @@ begin
 		  end loop;
 		  
 		  write(mline, string'(" "));
-		  hwrite(mline, s_vo(63 downto 32));
-		  
-		  wait for 10 * clk_period;
-		  
-		  s_vi <= x"F2F4EC3900000000"; -- value 3
-		  wait for 2*clk_period; -- important to wait for s_ready to be set to 0
-		  
-		  while s_ready = '0' loop
-			wait for clk_period;
-		  end loop;
-		  
-		  write(mline, string'(" "));
-		  hwrite(mline, s_vo(63 downto 32));
+		  hwrite(mline, s_vo);
 		  writeline(output, mline);
 			
 		  wait for 10 * clk_period;

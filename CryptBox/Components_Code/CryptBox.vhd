@@ -22,11 +22,11 @@ architecture behave of CryptBox is
 	component TeaCore is
     port (
 	     clk					: in std_logic;
-		  mode				: in std_logic; 		-- 0 code 1 decode
-		  key             : in std_logic_vector(127 downto 0);	-- key
-		  vi      	      : in std_logic_vector (63 downto 0); 	-- input data
-		  reset				: in std_logic;								-- enable
-		  vo      	      : out std_logic_vector (63 downto 0);	-- data output
+		  mode				: in std_logic; 		
+		  key             : in std_logic_vector(127 downto 0);
+		  vi      	      : in std_logic_vector (63 downto 0);
+		  reset				: in std_logic;
+		  vo      	      : out std_logic_vector (63 downto 0);
 		  ready				: out std_logic
 	 );
 	end component;
@@ -34,10 +34,10 @@ architecture behave of CryptBox is
 	component Arc4_Cypher is
     port (
 		  clk					: in std_logic;
-		  key             : in std_logic_vector(127 downto 0);	-- key
+		  key             : in std_logic_vector(127 downto 0);
 		  reset				: in std_logic;
-		  vi			: in std_logic_vector(31 downto 0);
-		  vo			: out std_logic_vector(31 downto 0);
+		  vi					: in std_logic_vector(63 downto 0);
+		  vo					: out std_logic_vector(63 downto 0);
 		  ready				: out std_logic
 	 );
 	end component;
@@ -47,8 +47,8 @@ architecture behave of CryptBox is
 	signal s_tea_vo		: std_logic_vector(63 downto 0);
 	signal s_tea_reset	: std_logic;
 	
-	signal s_arc_vi		: std_logic_vector(31 downto 0);
-	signal s_arc_vo		: std_logic_vector(31 downto 0);
+	signal s_arc_vi		: std_logic_vector(63 downto 0);
+	signal s_arc_vo		: std_logic_vector(63 downto 0);
 	signal s_arc_ready	: std_logic;
 	signal s_arc_reset	: std_logic;
 	
@@ -68,18 +68,18 @@ begin
 		clk 		=> clk,
 		key 		=> key,
 	   reset		=> s_arc_reset,
-		vi => s_arc_vi,
+		vi => vi,
 		vo => s_arc_vo,
 		ready	=> s_arc_ready
 	);
 
-	process (vi, mode) begin
+--	process (vi, mode) begin
 	
-		if (mode(1) = '1') then
-			s_arc_vi <= vi(63 downto 32);
-		end if;
+--		if (mode(1) = '1') then
+--			s_arc_vi <= vi(63 downto 32);
+--		end if;
 	
-	end process;
+--	end process;
 	
 	process (mode, reset) begin
 	
@@ -102,8 +102,8 @@ begin
 				vo <= s_tea_vo;
 				ready <= s_tea_ready;
 			elsif mode(1) = '1' and s_arc_ready = '1' then
-				vo(63 downto 32) <= s_arc_vo;
-				vo(31 downto 0) <= x"00000000";
+				vo <= s_arc_vo;
+				
 				ready <= s_arc_ready;
 			else
 				ready <= '0';
