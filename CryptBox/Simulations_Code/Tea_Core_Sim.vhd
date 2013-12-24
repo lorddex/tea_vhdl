@@ -12,11 +12,11 @@ architecture behav of Tea_Sim is
 	component TeaCore is
 	 port (
 		  clk					: in std_logic;
-		  mode				: in std_logic; 								-- 0 code 1 decode
-		  key             : in std_logic_vector(127 downto 0);	-- key
-		  vi      	      : in std_logic_vector (63 downto 0); 	-- input data
-		  reset				: in std_logic;								-- enable
-		  vo      	      : out std_logic_vector (63 downto 0);	-- data output
+		  mode				: in std_logic; 								
+		  key             : in std_logic_vector(127 downto 0);	
+		  vi      	      : in std_logic_vector (63 downto 0); 	
+		  reset				: in std_logic;								
+		  vo      	      : out std_logic_vector (63 downto 0);	
 		  ready 				: out std_logic
 	 );
 	end component;

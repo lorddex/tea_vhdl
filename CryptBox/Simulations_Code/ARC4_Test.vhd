@@ -13,10 +13,10 @@ architecture behav of ARC4_Sim is
 	component Arc4_Cypher is
 	    port (
 		  clk 			   : in std_logic;
-		  key             : in std_logic_vector(127 downto 0);	-- key
+		  key             : in std_logic_vector(127 downto 0);
 		  reset				: in std_logic;
-		  vi			: in std_logic_vector(31 downto 0);
-		  vo			: out std_logic_vector(31 downto 0);
+		  vi			: in std_logic_vector(63 downto 0);
+		  vo			: out std_logic_vector(63 downto 0);
 		  ready				: out std_logic
 	 );
 	 end component;
@@ -25,8 +25,8 @@ architecture behav of ARC4_Sim is
 	
 	signal s_clk			  : std_logic:='0';
 	signal s_key      	  : std_logic_vector (127 downto 0);
-	signal s_i_s			  : std_logic_vector(31 downto 0);
-	signal s_o_s			  : std_logic_vector(31 downto 0);	
+	signal s_i_s			  : std_logic_vector(63 downto 0);
+	signal s_o_s			  : std_logic_vector(63 downto 0);	
 	signal s_ready		  : std_logic;
 	signal s_reset			  : std_logic;
 	
@@ -67,7 +67,7 @@ begin
 			
 		  -- ENCODING 	
 			
-		  s_i_s <= x"075BCD15"; -- to code
+		  s_i_s <= x"3ADE68B1075BCD15"; 
 
 		  wait for clk_period;
 		  
@@ -80,20 +80,7 @@ begin
 		  
 		  wait for 10*clk_period;
 		  
-		  s_i_s <= x"3ADE68B1"; -- to code
-		  
-		  wait for clk_period;
-		  
-		  while s_ready = '0' loop
-			wait for clk_period;
-		  end loop;
-		  
-		  hwrite(mline, s_o_s);
-		  writeline(output, mline);
-
-		  wait for 10*clk_period;
-		  
-		  s_i_s <= x"0B7E7759"; -- to code
+		  s_i_s <= x"000000000B7E7759"; 
 		   wait for clk_period;
 		  
 		  while s_ready = '0' loop
@@ -112,7 +99,7 @@ begin
 		  
 		  -- DECODING
 		  
-		  s_i_s <= x"75F916F1"; -- to code
+		  s_i_s <= x"FEBB7D8F75F916F1"; 
 
 		  wait for clk_period;
 		  
@@ -123,22 +110,9 @@ begin
 		  hwrite(mline, s_o_s);
 		  writeline(output, mline);
 		  
-		 wait for 10*clk_period;
+		  wait for 10*clk_period;
 		  
-		  s_i_s <= x"FEBB7D8F"; -- to code
-		  
-		  wait for clk_period;
-		  
-		  while s_ready = '0' loop
-			wait for clk_period;
-		  end loop;
-		  
-		  hwrite(mline, s_o_s);
-		  writeline(output, mline);
-
-		 wait for 10*clk_period;
-		  
-		  s_i_s <= x"F2F4EC39"; -- to code
+		  s_i_s <= x"6196037AF2F4EC39";
 		   wait for clk_period;
 		  
 		  while s_ready = '0' loop

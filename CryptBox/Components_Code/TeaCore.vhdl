@@ -8,11 +8,11 @@ use IEEE.std_logic_textio.all;
 entity TeaCore is
     port (
 	     clk					: in std_logic;
-		  mode				: in std_logic; 								-- 0 code 1 decode
-		  key             : in std_logic_vector(127 downto 0);	-- key
-		  vi      	      : in std_logic_vector (63 downto 0); 	-- input data
-		  reset				: in std_logic;								-- enable
-		  vo      	      : out std_logic_vector (63 downto 0);	-- data output
+		  mode				: in std_logic; 								
+		  key             : in std_logic_vector(127 downto 0);	
+		  vi      	      : in std_logic_vector (63 downto 0); 	
+		  reset				: in std_logic;								
+		  vo      	      : out std_logic_vector (63 downto 0);	
 		  ready				: out std_logic
 	 );
 end entity TeaCore;
@@ -70,28 +70,6 @@ begin
 				elsif round = "10" then
 					vo(31 downto 0) <= std_logic_vector(do0);
 					vo(63 downto 32) <= std_logic_vector(do1);
-					-- debug code
---					write(mline, string'("di0="));
---					hwrite(mline, vi(63 downto 32));
---					write(mline, string'(" di1="));
---					hwrite(mline, vi(31 downto 0));
---					write(mline, string'(" k0="));
---					hwrite(mline, std_logic_vector(k0));
---					write(mline, string'(" k1="));
---					hwrite(mline, std_logic_vector(k1));
---					write(mline, string'(" k2="));
---					hwrite(mline, std_logic_vector(k2));
---					write(mline, string'(" k3="));
---					hwrite(mline, std_logic_vector(k3));
---					write(mline, string'("delta="));
---					hwrite(mline, std_logic_vector(delta));
---					write(mline, string'(" sum="));
---					hwrite(mline, std_logic_vector(sum));
---					write(mline, string'(" v0="));
---					hwrite(mline, std_logic_vector(do0));
---					write(mline, string'(" v1="));
---					hwrite(mline, std_logic_vector(do1));
---					writeline(output, mline);
 					ready <= '1';				
 				end if;
 			end if;

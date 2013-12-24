@@ -75,10 +75,11 @@ void arc4_prga(uint8_t *state, uint8_t *out, int len)
    
    for (x=0; x < len; ++x)  {
       i = (i + 1) % 256; 
-      j = (j + state[i]) % 256; 
+      j = (j + state[i]) % 256;
       t = state[i]; 
       state[i] = state[j]; 
       state[j] = t; 
+//      printf("Switching %d with %d\n t = %d\n", i, j, (state[i]+state[j]) %256); 
       out[x] ^= state[(state[i] + state[j]) % 256];
    }
 }  
@@ -120,7 +121,7 @@ void tea_decrypt (uint32_t* v, uint8_t* k) {
 int main() {
 
     uint32_t v[] = {128, 0};
-    uint32_t s[] = {123456789, 987654321, 192837465};
+    uint32_t s[] = {123456789, 987654321, 192837465, 0};
 
     int i;
 #if TEA == 1
@@ -140,25 +141,25 @@ int main() {
 #if STREAM == 1
     /* ARC4 */
     printf("\n\nStream to encode:\t");
-    for (i=0;i<3;i++)
+    for (i=0;i<4;i++)
         printf("%08"PRIX8"\t", s[i]);
     printf("\n");
 
-    arc4_encrypt(s, key2, 3);
+    arc4_encrypt(s, key2, 4);
     printf("RC4 encoded values:\t");
-    for (i=0;i<3;i++)
+    for (i=0;i<4;i++)
         printf("%08"PRIX8"\t", s[i]);
     printf("\n");
 
 #if STREAM_DECODE == 1
     printf("Stream to decode:\t");
-    for (i=0;i<3;i++)
+    for (i=0;i<4;i++)
         printf("%08"PRIX8"\t", s[i]);
     printf("\n");
 
-    arc4_encrypt(s, key2, 3);
+    arc4_encrypt(s, key2, 4);
     printf("RC4 decoded values:\t");
-    for (i=0;i<3;i++)
+    for (i=0;i<4;i++)
         printf("%08"PRIX8"\t", s[i]);
     printf("\n");
 #endif
