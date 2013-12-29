@@ -59,9 +59,14 @@ begin
 		  
     stim_proc: process 
 	 variable mline: line;
+	 variable tmpin: std_logic_vector(127 downto 0);
 	 begin
 		    
 		  -- ARC CODE
+		  tmpin := x"3ADE68B1075BCD15000000000B7E7759";
+		  write(mline, string'("stream to encode: "));
+		  hwrite(mline, std_logic_vector(tmpin));
+		  writeline(output, mline);
 		  
 		  s_mode <= "10";	 -- SET ARC
 		  s_reset <= '1';	 -- RESET ARC
@@ -108,7 +113,6 @@ begin
 		  
 		  write(mline, string'("dec stream: "));
 		  hwrite(mline, s_vo);
-		  writeline(output, mline);
 		  
 		  wait for 10 * clk_period;
 		 
@@ -126,6 +130,12 @@ begin
 		  wait for 10 * clk_period;
 		  
 		  -- TEA ENCODE
+		  
+		  tmpin(63 downto 0) := x"0000008000000000";
+		  write(mline, string'("tea to encode: "));
+		  hwrite(mline, std_logic_vector(tmpin(63 downto 0)));
+		  writeline(output, mline);
+		  
 		  s_mode <= "00"; -- SET TEA ENCODE
 		  s_reset <= '1';
 		  s_key <= x"00000080000000B6000000DA00000001";
@@ -158,9 +168,8 @@ begin
 		  end loop;
 		  
 		  write(mline, string'("tea decoded: "));
-		  hwrite(mline, s_vo(63 downto 32));
-		  write(mline, string'(" "));
 		  hwrite(mline, s_vo(31 downto 0));
+		  hwrite(mline, s_vo(63 downto 32));
 		  writeline(output, mline);
 		  
 		  wait for 10 * clk_period;

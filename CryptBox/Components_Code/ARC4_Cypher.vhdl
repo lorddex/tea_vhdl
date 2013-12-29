@@ -38,7 +38,7 @@ architecture behave of Arc4_Cypher is
 	signal old_x				: integer := 0;
 	signal old_j				: integer := 0;
 	signal s_votmp				: std_logic_vector(63 downto 0);
-	signal continue			: std_logic;
+
 --	signal ctr2					: unsigned(2 downto 0);
 --	signal j						: integer;
 --	signal x						: integer;
@@ -72,13 +72,11 @@ begin
 			if reset = '0' then
 				if (s_ready = '1') then
 					if (rising_edge(clk)) then
-						if round = "0000" then
-							if continue = '0' then							
+						if round = "0000" then						
 								for i in 1 to 256 loop
 									s_status_a(i-1) <= unsigned(s_status((i*8 -1) downto ((i-1)*8)));
 									--hwrite(mline, s_status((i*8 -1) downto ((i-1)*8)));
 								end loop;
-							end if;
 							--writeline(output, mline);
 							round <= "0001";
 						elsif round >= "0001" and round <= "1000" then
@@ -157,10 +155,9 @@ begin
 							end if;
 						elsif round = "1001" then		
 							if old_in /= vi then
-								round <= "0000";
 								ready <= '0';
 								s_votmp <= x"0000000000000000";
-								continue <= '1';
+								round <= "0001";
 							end if;
 						end if;
 					end if;
@@ -177,7 +174,6 @@ begin
 			x:=0;
 			j:=0;
 			round <= "0000";
-			continue <= '0';
 		end if;
 	end process;
 	
