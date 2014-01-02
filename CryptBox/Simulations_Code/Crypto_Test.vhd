@@ -1,3 +1,9 @@
+-- Pietrofrancesco Apollonio
+-- 00609919
+
+-- Attività progettuale di Sistemi Digitali
+-- CryptBox
+
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
@@ -63,9 +69,15 @@ begin
 	 begin
 		    
 		  -- ARC CODE
-		  tmpin := x"3ADE68B1075BCD15000000000B7E7759";
-		  write(mline, string'("stream to encode: "));
-		  hwrite(mline, std_logic_vector(tmpin));
+		  tmpin := x"075BCD153ADE68B10B7E775900000000";
+		  write(mline, string'("Stream to encode: "));
+		  hwrite(mline, std_logic_vector(tmpin(127 downto 96)));
+		  write(mline, string'(" "));
+		  hwrite(mline, std_logic_vector(tmpin(95 downto 64)));
+		  write(mline, string'(" "));
+		  hwrite(mline, std_logic_vector(tmpin(63 downto 32)));
+		  write(mline, string'(" "));
+		  hwrite(mline, std_logic_vector(tmpin(31 downto 0)));
 		  writeline(output, mline);
 		  
 		  s_mode <= "10";	 -- SET ARC
@@ -81,9 +93,11 @@ begin
 			wait for clk_period;
 		  end loop;
 		  
-		  write(mline, string'("enc stream: "));
-		  hwrite(mline, s_vo);
-		  
+		  write(mline, string'("RC4 encoded values: "));
+		  hwrite(mline, s_vo(31 downto 0));
+		  write(mline, string'(" "));
+		  hwrite(mline, s_vo(63 downto 32));
+
 		  wait for 10 * clk_period;
 		 
 		  s_vi <= x"000000000B7E7759"; -- value 2
@@ -94,7 +108,9 @@ begin
 		  end loop;
 		  
 		  write(mline, string'(" "));
-		  hwrite(mline, s_vo);
+		  hwrite(mline, s_vo(31 downto 0));
+		  write(mline, string'(" "));
+		  hwrite(mline, s_vo(63 downto 32));
 		  writeline(output, mline);
 		  
 		  wait for 10 * clk_period;
@@ -111,8 +127,11 @@ begin
 			wait for clk_period;
 		  end loop;
 		  
-		  write(mline, string'("dec stream: "));
-		  hwrite(mline, s_vo);
+		  write(mline, string'("RC4 decoded values: "));
+		  write(mline, string'(" "));
+		  hwrite(mline, s_vo(31 downto 0));
+		  write(mline, string'(" "));
+		  hwrite(mline, s_vo(63 downto 32));
 		  
 		  wait for 10 * clk_period;
 		 
@@ -123,8 +142,10 @@ begin
 			wait for clk_period;
 		  end loop;
 		  
+		  
+		  hwrite(mline, s_vo(31 downto 0));
 		  write(mline, string'(" "));
-		  hwrite(mline, s_vo);
+		  hwrite(mline, s_vo(63 downto 32));
 		  writeline(output, mline);
 			
 		  wait for 10 * clk_period;
@@ -132,8 +153,10 @@ begin
 		  -- TEA ENCODE
 		  
 		  tmpin(63 downto 0) := x"0000008000000000";
-		  write(mline, string'("tea to encode: "));
-		  hwrite(mline, std_logic_vector(tmpin(63 downto 0)));
+		  write(mline, string'("Data to encode: "));
+		  hwrite(mline, std_logic_vector(tmpin(63 downto 32)));
+		  write(mline, string'(" "));
+		  hwrite(mline, std_logic_vector(tmpin(31 downto 0)));
 		  writeline(output, mline);
 		  
 		  s_mode <= "00"; -- SET TEA ENCODE
@@ -147,10 +170,10 @@ begin
 			wait for clk_period;
 		  end loop;
 		  
-		  write(mline, string'("tea encoded: "));
-		  hwrite(mline, s_vo(63 downto 32));
-		  write(mline, string'(" "));
+		  write(mline, string'("Tea encoded values: "));
 		  hwrite(mline, s_vo(31 downto 0));
+		  write(mline, string'(" "));
+		  hwrite(mline, s_vo(63 downto 32));
 		  writeline(output, mline);
 		  
 		  wait for 10 * clk_period;
@@ -167,8 +190,9 @@ begin
 			wait for clk_period;
 		  end loop;
 		  
-		  write(mline, string'("tea decoded: "));
+		  write(mline, string'("Tea decoded values: "));
 		  hwrite(mline, s_vo(31 downto 0));
+		  write(mline, string'(" "));
 		  hwrite(mline, s_vo(63 downto 32));
 		  writeline(output, mline);
 		  

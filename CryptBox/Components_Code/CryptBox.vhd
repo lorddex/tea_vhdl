@@ -1,3 +1,9 @@
+-- Pietrofrancesco Apollonio
+-- 00609919
+
+-- Attività progettuale di Sistemi Digitali
+-- CryptBox
+
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
@@ -68,19 +74,11 @@ begin
 		clk 		=> clk,
 		key 		=> key,
 	   reset		=> s_arc_reset,
-		vi => vi,
-		vo => s_arc_vo,
-		ready	=> s_arc_ready
+		vi 		=> vi,
+		vo 		=> s_arc_vo,
+		ready		=> s_arc_ready
 	);
 
---	process (vi, mode) begin
-	
---		if (mode(1) = '1') then
---			s_arc_vi <= vi(63 downto 32);
---		end if;
-	
---	end process;
-	
 	process (mode, reset) begin
 	
 		if (mode(1) = '0') then
@@ -94,10 +92,9 @@ begin
 	
 	end process;
 	
-	process (clk) 
+	process (s_tea_ready, s_arc_ready) 
 		variable mline : line;
 	begin
-		if rising_edge(clk) then
 			if mode(1) = '0' and s_tea_ready = '1' then
 				vo <= s_tea_vo;
 				ready <= s_tea_ready;
@@ -108,8 +105,6 @@ begin
 			else
 				ready <= '0';
 			end if;
-		end if;
-		
 	end process;
 	
 end behave;
