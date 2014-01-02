@@ -16,11 +16,6 @@
 
 uint8_t key[] = { 128, 182, 218, 1 };
 
-// 11110000001111111100000011111001 -> 4030710009
-// 11101010101000000000000000000000 -> 3936354304
-// 00101010101010101010101010100000 -> 715827872
-// 00000000010101010101010101010101 -> 5592405
-//uint32_t key2[] = { 4030710009, 3936354304, 715827872, 5592405 };
 uint32_t key2[] = { 5592405, 715827872, 3936354304, 4030710009 };
 
 // RC4 - http://bradconte.com/rc4_c - https://github.com/B-Con/crypto-algorithms
@@ -34,33 +29,15 @@ void arc4_ksa(uint8_t *state, uint8_t *key)
    int i, j=0;
    uint32_t t; 
    
-   //printf("%d %d\n", key[0], key[8]);
-   //printf("%d %d\n", state[0], state[1023]);
-  
-/*   printf("KEY(i): ");
-   for (i=0; i<16; i++)
-        printf("%02"PRIX8" ", key[i]);
-    printf("\n");*/
- 
    for (i=0; i < 256; ++i)
       state[i] = i; 
-/*   printf("STATUS(i): ");
-   for (i=0; i< 255; i++)
-        printf("%02"PRIX8" ", state[i]);
-    printf("\n");*/
 
    for (i=0; i < 256; ++i) {
       j = (j + state[i] + key[i % (KEY2*4)]) % 256; 
       t = state[i];
-//      printf("switching i(value)=%d(%02"PRIX8") key(value)=%02"PRIX8"(%d) with j(value)=%d(%02"PRIX8")\n", i, state[i], key[i % KEY2], i % KEY2, j, state[j]); 
       state[i] = state[j]; 
       state[j] = t; 
    }
-	
- //  printf("STATUS: ");
- //  for (i=0; i<256; i++)
- //       printf("%02"PRIX8" ", state[i]);
- //   printf("\n");
 }
 
 // Pseudo-Random Generator Algorithm 
@@ -79,8 +56,6 @@ void arc4_prga(uint8_t *state, uint8_t *out, int len)
       t = state[i]; 
       state[i] = state[j]; 
       state[j] = t; 
-   //   if (i == 14 && j == 3)
-//	printf("Switching %d with %d\n t = %d val_i=%2X val_j=%2X\n", i, j, (state[i]+state[j]) %256, state[i], state[j]); 
       out[x] ^= state[(state[i] + state[j]) % 256];
    }
 }  
@@ -102,7 +77,6 @@ void tea_encrypt (uint32_t* v, uint8_t* k) {
         sum += delta;
         v0 += ((v1<<4) + k0) ^ (v1 + sum) ^ ((v1>>5) + k1);
         v1 += ((v0<<4) + k2) ^ (v0 + sum) ^ ((v0>>5) + k3);  
-//	printf("Tea encoded values: v0=%08"PRIX8" v1=%08"PRIX8"\n", v0, v1);
     }                                              /* end cycle */
     v[0]=v0; v[1]=v1;
 }
@@ -128,10 +102,6 @@ int main() {
 #if TEA == 1
     printf("Data to encode:    \t%08"PRIX8"\t%08"PRIX8"\n", v[0], v[1]);
 
-    /* TEA */
-/*    for (i=0; i<4; i++)
-	printf("Key[%d]=%08"PRIX32" ", i, key[i]);
-    printf("\n");  */
     tea_encrypt(v, key);
     printf("Tea encoded values:\t%08"PRIX8" \t%08"PRIX8"\n", v[0], v[1]);
 
@@ -153,11 +123,6 @@ int main() {
     printf("\n");
 
 #if STREAM_DECODE == 1
-    printf("Stream to decode:\t");
-    for (i=0;i<4;i++)
-        printf("%08"PRIX8"\t", s[i]);
-    printf("\n");
-
     arc4_encrypt(s, key2, 4);
     printf("RC4 decoded values:\t");
     for (i=0;i<4;i++)
